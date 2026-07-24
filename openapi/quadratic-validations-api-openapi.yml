@@ -1,0 +1,320 @@
+openapi: 3.1.0
+info:
+  title: Quadratic Developer Agent Connections Validations API
+  description: 'Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.
+
+
+    **Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.'
+  contact:
+    name: Quadratic
+  license:
+    name: Apache-2.0
+  version: 0.26.9
+tags:
+- name: Validations
+  description: Manage cell validation rules.
+paths:
+  /v1/files/{file_id}/validations:
+    get:
+      tags:
+      - Validations
+      summary: Lists all data-validation rules on a file (or one sheet).
+      operationId: listValidations
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: sheet_name
+        in: query
+        description: Optional sheet to filter by. Omit to list across the whole file.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Validation rules
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+    delete:
+      tags:
+      - Validations
+      summary: Removes any data-validation rule(s) covering the given selection.
+      operationId: removeValidation
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoveValidationRequest'
+        required: true
+      responses:
+        '200':
+          description: Validation removed
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/validations/list:
+    post:
+      tags:
+      - Validations
+      summary: 'Adds a list-of-values validation. Either `list_source_list` or
+
+        `list_source_selection` must be supplied (but not both).'
+      operationId: addListValidation
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddListValidationRequest'
+        required: true
+      responses:
+        '200':
+          description: Validation added
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Missing list source or other validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/validations/logical:
+    post:
+      tags:
+      - Validations
+      summary: Adds a boolean (true/false) validation rule to a selection.
+      operationId: addLogicalValidation
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddLogicalValidationRequest'
+        required: true
+      responses:
+        '200':
+          description: Validation added
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+components:
+  schemas:
+    ErrorDetail:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
+          type: string
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
+    RemoveValidationRequest:
+      type: object
+      required:
+      - selection
+      properties:
+        selection:
+          type: string
+          example: A1:A20
+        sheet_name:
+          type:
+          - string
+          - 'null'
+          example: Sheet 1
+    AddLogicalValidationRequest:
+      type: object
+      required:
+      - selection
+      properties:
+        ignore_blank:
+          type:
+          - boolean
+          - 'null'
+          description: Treat blank cells as valid.
+          example: true
+        selection:
+          type: string
+          description: A1 range the rule applies to.
+          example: A1:A20
+        sheet_name:
+          type:
+          - string
+          - 'null'
+          example: Sheet 1
+        show_checkbox:
+          type:
+          - boolean
+          - 'null'
+          description: Render the cell as a checkbox when `true`.
+          example: true
+    AddListValidationRequest:
+      type: object
+      required:
+      - selection
+      properties:
+        drop_down:
+          type:
+          - boolean
+          - 'null'
+          description: Render a dropdown chooser inside the cell.
+          example: true
+        ignore_blank:
+          type:
+          - boolean
+          - 'null'
+          description: Treat blank cells as valid.
+          example: true
+        list_source_list:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: 'Inline list of allowed values. Mutually exclusive with
+
+            `list_source_selection`.'
+          example:
+          - High
+          - Medium
+          - Low
+        list_source_selection:
+          type:
+          - string
+          - 'null'
+          description: 'A1 range whose values become the allowed list. Mutually exclusive
+
+            with `list_source_list`.'
+          example: Lookups!A2:A10
+        selection:
+          type: string
+          example: B1:B100
+        sheet_name:
+          type:
+          - string
+          - 'null'
+          example: Sheet 1
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: API token (qdx_live_… or qdx_test_…)
+      description: 'API tokens are minted from the Quadratic UI under Team Settings → API Tokens. Send as `Authorization: Bearer <token>`.'

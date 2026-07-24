@@ -1,0 +1,111 @@
+openapi: 3.1.0
+info:
+  title: Quadratic Developer Agent Connections Auth API
+  description: 'Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.
+
+
+    **Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.'
+  contact:
+    name: Quadratic
+  license:
+    name: Apache-2.0
+  version: 0.26.9
+tags:
+- name: Auth
+  description: Identity for the calling token.
+paths:
+  /v1/auth/me:
+    get:
+      tags:
+      - Auth
+      summary: 'Returns identity information derived from the API token that authorized
+
+        this request. Useful for verifying a token works and discovering which
+
+        team it belongs to.'
+      operationId: getMe
+      responses:
+        '200':
+          description: Token is valid; returns identity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeResponse'
+        '401':
+          description: Missing, malformed, or invalid bearer token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+components:
+  schemas:
+    ErrorDetail:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
+          type: string
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    MeResponse:
+      type: object
+      description: Identity of the caller derived from their API token.
+      required:
+      - authenticated
+      - email
+      - team_uuid
+      - token_uuid
+      properties:
+        authenticated:
+          type: boolean
+          description: 'Always `true` for a successful response (the request reached the
+
+            handler, which means bearer auth passed).'
+        email:
+          type: string
+          description: Email address associated with the user that owns the API token.
+          example: alice@example.com
+        team_uuid:
+          type: string
+          format: uuid
+          description: 'UUID of the team the caller''s token is scoped to. Handlers default to
+
+            this team when one isn''t specified in the request.'
+        token_uuid:
+          type: string
+          format: uuid
+          description: 'UUID of the API token authorizing this request. Useful for clients
+
+            that want to correlate their requests to tokens in audit logs.'
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: API token (qdx_live_… or qdx_test_…)
+      description: 'API tokens are minted from the Quadratic UI under Team Settings → API Tokens. Send as `Authorization: Bearer <token>`.'

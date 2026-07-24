@@ -1,0 +1,119 @@
+openapi: 3.1.0
+info:
+  title: Quadratic Developer Agent Connections API
+  description: 'Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.
+
+
+    **Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.'
+  contact:
+    name: Quadratic
+  license:
+    name: Apache-2.0
+  version: 0.26.9
+tags:
+- name: Connections
+  description: Fetch schemas from registered DB connections.
+paths:
+  /v1/connections/schemas:
+    post:
+      tags:
+      - Connections
+      summary: 'Fetches DB schemas from the connection service. Unlike the other
+
+        endpoints this doesn''t require a worker — it talks directly to the
+
+        `quadratic-connection` service.'
+      description: 'The response is an array — one entry per requested `connection_id` —
+
+        of either `{ connection_id, schema }` (success) or
+
+        `{ connection_id, error }` (per-connection failure). The HTTP status
+
+        is `200` even when individual connections fail.'
+      operationId: getConnectionSchemas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetSchemasRequest'
+        required: true
+      responses:
+        '200':
+          description: Per-connection schema or error array
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '500':
+          description: Connection service URL not configured
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+components:
+  schemas:
+    GetSchemasRequest:
+      type: object
+      required:
+      - connection_ids
+      - connection_type
+      - team_uuid
+      properties:
+        connection_ids:
+          type: array
+          items:
+            type: string
+          description: Connection UUIDs to fetch schemas for, in order.
+        connection_type:
+          type: string
+          description: 'Connection kind: `postgres`, `mysql`, `mssql`, `snowflake`, etc.
+
+            Must match the kind registered for these connections.'
+        team_uuid:
+          type: string
+          description: Team UUID that owns the connections.
+    ErrorDetail:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
+          type: string
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: API token (qdx_live_… or qdx_test_…)
+      description: 'API tokens are minted from the Quadratic UI under Team Settings → API Tokens. Send as `Authorization: Bearer <token>`.'

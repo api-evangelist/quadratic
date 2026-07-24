@@ -1,0 +1,336 @@
+openapi: 3.1.0
+info:
+  title: Quadratic Developer Agent Connections Tables API
+  description: 'Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.
+
+
+    **Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.'
+  contact:
+    name: Quadratic
+  license:
+    name: Apache-2.0
+  version: 0.26.9
+tags:
+- name: Tables
+  description: Create, configure, and manage data tables.
+paths:
+  /v1/files/{file_id}/tables:
+    post:
+      tags:
+      - Tables
+      summary: Creates a new data table on the given sheet.
+      operationId: addTable
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddTableRequest'
+        required: true
+      responses:
+        '200':
+          description: Table created
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+    patch:
+      tags:
+      - Tables
+      summary: 'Updates table-level metadata (name, header visibility, alternating
+
+        row colors, etc.). Only the fields you supply are changed.'
+      operationId: tableMeta
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TableMetaRequest'
+        required: true
+      responses:
+        '200':
+          description: Table metadata updated
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/tables/columns:
+    put:
+      tags:
+      - Tables
+      summary: Updates per-column settings (display name, sort, filter) on a table.
+      operationId: tableColumnSettings
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TableColumnSettingsRequest'
+        required: true
+      responses:
+        '200':
+          description: Column settings updated
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/tables/from-range:
+    post:
+      tags:
+      - Tables
+      summary: Converts a plain range of cells into a structured data table.
+      operationId: convertToTable
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConvertToTableRequest'
+        required: true
+      responses:
+        '200':
+          description: Range converted
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+components:
+  schemas:
+    ErrorDetail:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
+          type: string
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
+    TableColumnSettingsRequest:
+      type: object
+      required:
+      - table_location
+      - column_names
+      properties:
+        column_names:
+          type: array
+          items: {}
+          description: 'Per-column rename / visibility settings. Each item accepts either
+
+            `{old_name, new_name, show}` (AI-tool shape) or `{name, display_name,
+
+            show?}` (REST-friendly shape). `show` defaults to `true` if omitted.'
+          example:
+          - old_name: city
+            new_name: City
+            show: true
+          - name: region
+            display_name: Region
+        sheet_name:
+          type:
+          - string
+          - 'null'
+          example: Sheet 1
+        table_location:
+          type: string
+          description: A1 cell inside the target table.
+          example: A1
+    TableMetaRequest:
+      type: object
+      required:
+      - table_location
+      properties:
+        alternating_row_colors:
+          type:
+          - boolean
+          - 'null'
+        first_row_is_column_names:
+          type:
+          - boolean
+          - 'null'
+        new_table_name:
+          type:
+          - string
+          - 'null'
+        sheet_name:
+          type:
+          - string
+          - 'null'
+        show_columns:
+          type:
+          - boolean
+          - 'null'
+        show_name:
+          type:
+          - boolean
+          - 'null'
+        table_location:
+          type: string
+          description: A1 cell inside the target table (any cell within its range).
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    ConvertToTableRequest:
+      type: object
+      required:
+      - selection
+      - table_name
+      - first_row_is_column_names
+      properties:
+        first_row_is_column_names:
+          type: boolean
+        selection:
+          type: string
+        sheet_name:
+          type:
+          - string
+          - 'null'
+        table_name:
+          type: string
+    AddTableRequest:
+      type: object
+      required:
+      - sheet_name
+      - top_left_position
+      - table_name
+      - table_data
+      properties:
+        sheet_name:
+          type: string
+        table_data:
+          description: 2D array — first row is treated as column names.
+        table_name:
+          type: string
+        top_left_position:
+          type: string
+          description: A1 anchor for the new table's top-left.
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: API token (qdx_live_… or qdx_test_…)
+      description: 'API tokens are minted from the Quadratic UI under Team Settings → API Tokens. Send as `Authorization: Bearer <token>`.'

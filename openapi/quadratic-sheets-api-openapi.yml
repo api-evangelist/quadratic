@@ -1,0 +1,536 @@
+openapi: 3.1.0
+info:
+  title: Quadratic Developer Agent Connections Sheets API
+  description: 'Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.
+
+
+    **Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.'
+  contact:
+    name: Quadratic
+  license:
+    name: Apache-2.0
+  version: 0.26.9
+tags:
+- name: Sheets
+  description: Add, rename, delete, reorder, and recolor sheets.
+paths:
+  /v1/files/{file_id}/sheets:
+    get:
+      tags:
+      - Sheets
+      summary: 'Returns info for all sheets, or a single sheet when `sheet_name` is
+
+        provided. Read-only; dispatches via the worker''s `/mcp/query` route.'
+      operationId: listSheets
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: sheet_name
+        in: query
+        description: 'Limit the response to a single sheet by name. Omit to list every
+
+          sheet in the file.'
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Sheet info from the worker
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+    post:
+      tags:
+      - Sheets
+      summary: Adds a new sheet to the file.
+      operationId: addSheet
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddSheetRequest'
+        required: true
+      responses:
+        '200':
+          description: Sheet added; worker response
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/sheets/colors:
+    patch:
+      tags:
+      - Sheets
+      summary: Recolors one or more sheet tabs in a single call.
+      operationId: colorSheets
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ColorSheetsRequest'
+        required: true
+      responses:
+        '200':
+          description: Colors applied
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/sheets/duplicate:
+    post:
+      tags:
+      - Sheets
+      summary: Duplicates an existing sheet under a new name.
+      operationId: duplicateSheet
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DuplicateSheetRequest'
+        required: true
+      responses:
+        '200':
+          description: Sheet duplicated
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/sheets/move:
+    post:
+      tags:
+      - Sheets
+      summary: Reorders sheets within a file.
+      operationId: moveSheet
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoveSheetRequest'
+        required: true
+      responses:
+        '200':
+          description: Sheet reordered
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/sheets/{sheet_name}:
+    delete:
+      tags:
+      - Sheets
+      summary: 'Deletes a sheet by name. Files must always have at least one sheet, so
+
+        the worker will reject deleting the last remaining sheet.'
+      operationId: deleteSheet
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: sheet_name
+        in: path
+        description: Sheet name
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Sheet deleted
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Cannot delete the only sheet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '404':
+          description: Sheet not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+    patch:
+      tags:
+      - Sheets
+      summary: Renames a sheet.
+      operationId: renameSheet
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: sheet_name
+        in: path
+        description: Existing sheet name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenameSheetRequest'
+        required: true
+      responses:
+        '200':
+          description: Sheet renamed
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '404':
+          description: Sheet not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/sheets/{sheet_name}/frozen:
+    patch:
+      tags:
+      - Sheets
+      summary: 'Sets the frozen (pinned) rows and columns for a sheet. Frozen rows always
+
+        start at row 1 and frozen columns always start at column 1.'
+      operationId: setFrozenPanes
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: sheet_name
+        in: path
+        description: Sheet name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetFrozenPanesRequest'
+        required: true
+      responses:
+        '200':
+          description: Frozen panes set
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '404':
+          description: Sheet not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+components:
+  schemas:
+    ErrorDetail:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
+          type: string
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
+    SetFrozenPanesRequest:
+      type: object
+      required:
+      - frozen_row_count
+      - frozen_column_count
+      properties:
+        frozen_column_count:
+          type: integer
+          format: int32
+          description: Number of columns to freeze (pin) starting at column 1. Use 0 to unfreeze columns.
+          minimum: 0
+        frozen_row_count:
+          type: integer
+          format: int32
+          description: Number of rows to freeze (pin) starting at row 1. Use 0 to unfreeze rows.
+          minimum: 0
+    ColorSheetEntry:
+      type: object
+      required:
+      - sheet_name
+      - color
+      properties:
+        color:
+          type: string
+          description: CSS-style color (e.g. `#ff0000`, `red`, `rgb(0, 0, 255)`).
+          example: '#ff0000'
+        sheet_name:
+          type: string
+    ColorSheetsRequest:
+      type: object
+      required:
+      - sheet_names_to_color
+      properties:
+        sheet_names_to_color:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColorSheetEntry'
+    RenameSheetRequest:
+      type: object
+      required:
+      - new_name
+      properties:
+        new_name:
+          type: string
+    DuplicateSheetRequest:
+      type: object
+      required:
+      - sheet_name_to_duplicate
+      - name_of_new_sheet
+      properties:
+        name_of_new_sheet:
+          type: string
+        sheet_name_to_duplicate:
+          type: string
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    MoveSheetRequest:
+      type: object
+      required:
+      - sheet_name
+      properties:
+        insert_before_sheet_name:
+          type:
+          - string
+          - 'null'
+          description: 'If set, move the sheet to immediately before the named sheet.
+
+            Otherwise move to the end.'
+        sheet_name:
+          type: string
+    AddSheetRequest:
+      type: object
+      required:
+      - sheet_name
+      properties:
+        insert_before_sheet_name:
+          type:
+          - string
+          - 'null'
+          description: 'If set, insert the new sheet immediately before the named sheet.
+
+            Otherwise append at the end.'
+        sheet_name:
+          type: string
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: API token (qdx_live_… or qdx_test_…)
+      description: 'API tokens are minted from the Quadratic UI under Team Settings → API Tokens. Send as `Authorization: Bearer <token>`.'

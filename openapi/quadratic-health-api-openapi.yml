@@ -1,0 +1,55 @@
+openapi: 3.1.0
+info:
+  title: Quadratic Developer Agent Connections Health API
+  description: 'Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.
+
+
+    **Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.'
+  contact:
+    name: Quadratic
+  license:
+    name: Apache-2.0
+  version: 0.26.9
+tags:
+- name: Health
+  description: Liveness probes.
+paths:
+  /health:
+    get:
+      tags:
+      - Health
+      operationId: health
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      description: 'Liveness probe response. Exposes the running version so deploys can be
+
+        confirmed without checking the binary directly.'
+      required:
+      - status
+      - version
+      properties:
+        status:
+          type: string
+          description: 'Always `"ok"` when the process is reachable. Use HTTP status to
+
+            detect failure rather than parsing this field.'
+          example: ok
+        version:
+          type: string
+          description: '`Cargo.toml` package version of the running binary.'
+          example: 0.25.14
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: API token (qdx_live_… or qdx_test_…)
+      description: 'API tokens are minted from the Quadratic UI under Team Settings → API Tokens. Send as `Authorization: Bearer <token>`.'

@@ -1,0 +1,980 @@
+openapi: 3.1.0
+info:
+  title: Quadratic Developer Agent Connections Cells API
+  description: 'Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.
+
+
+    **Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.'
+  contact:
+    name: Quadratic
+  license:
+    name: Apache-2.0
+  version: 0.26.9
+tags:
+- name: Cells
+  description: Read and write cell values, code, formulas, formats, borders, and merges.
+paths:
+  /v1/files/{file_id}/cells:
+    get:
+      tags:
+      - Cells
+      summary: 'Reads cell values for a selection. Read-only; dispatches via
+
+        `/mcp/query`.'
+      operationId: getCells
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: selection
+        in: query
+        description: A1-style range, e.g. `A1:B10` or `Sheet1!A1:B10`.
+        required: true
+        schema:
+          type: string
+        example: A1:B10
+      - name: sheet_name
+        in: query
+        description: Optional sheet name. Defaults to the active sheet when omitted.
+        required: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Zero-indexed page when the selection is paginated by the worker.
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Cell data from the worker
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+    put:
+      tags:
+      - Cells
+      summary: Writes a 2D block of values starting at `top_left_position`.
+      operationId: setCellValues
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetCellValuesRequest'
+        required: true
+      responses:
+        '200':
+          description: Cells written
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+    delete:
+      tags:
+      - Cells
+      summary: Deletes the contents of every cell in the selection.
+      operationId: deleteCells
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteCellsRequest'
+        required: true
+      responses:
+        '200':
+          description: Cells cleared
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/cells/borders:
+    put:
+      tags:
+      - Cells
+      summary: Applies cell borders in batch.
+      operationId: setBorders
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetBordersRequest'
+        required: true
+      responses:
+        '200':
+          description: Borders applied
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/cells/code:
+    get:
+      tags:
+      - Cells
+      summary: Fetches the source and computed value of a single code cell.
+      operationId: getCodeCell
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: code_cell_position
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: sheet_name
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Code cell info
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '404':
+          description: No code cell at that position
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+    put:
+      tags:
+      - Cells
+      summary: Creates or updates a Python / JavaScript / Formula code cell.
+      operationId: setCodeCell
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetCodeCellRequest'
+        required: true
+      responses:
+        '200':
+          description: Code cell updated; worker may include compute results
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/cells/code/rerun:
+    post:
+      tags:
+      - Cells
+      summary: Triggers re-execution of code cells in the file (or selection).
+      operationId: rerunCode
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RerunCodeRequest'
+        required: true
+      responses:
+        '200':
+          description: Rerun complete; worker output
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/cells/dependencies:
+    get:
+      tags:
+      - Cells
+      summary: 'Lists the formula / code-cell dependencies that flow into or out of
+
+        the given position.'
+      operationId: getDependencies
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: position
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: sheet_name
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: direction
+        in: query
+        description: '`forward`, `reverse`, or `both`. Defaults to `both`.'
+        required: false
+        schema:
+          type: string
+        example: both
+      responses:
+        '200':
+          description: Dependency graph slice
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/cells/formats:
+    get:
+      tags:
+      - Cells
+      summary: Reads cell formatting (font, color, alignment, etc.) for a selection.
+      operationId: getFormats
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: selection
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: sheet_name
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Format objects per cell
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+    put:
+      tags:
+      - Cells
+      summary: Applies formatting to one or more cells in a single batch.
+      operationId: setFormats
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetFormatsRequest'
+        required: true
+      responses:
+        '200':
+          description: Formats applied
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/cells/formula:
+    put:
+      tags:
+      - Cells
+      summary: Writes one or more formula cells in a single batch.
+      operationId: setFormulaCells
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetFormulaCellsRequest'
+        required: true
+      responses:
+        '200':
+          description: Formula cells written
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/cells/has-data:
+    get:
+      tags:
+      - Cells
+      summary: Returns whether any cell in the selection contains data.
+      operationId: hasCellData
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: selection
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: sheet_name
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Worker response
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/cells/merge:
+    post:
+      tags:
+      - Cells
+      summary: Merges every cell in the selection into a single visual cell.
+      operationId: mergeCells
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MergeCellsRequest'
+        required: true
+      responses:
+        '200':
+          description: Cells merged
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+    delete:
+      tags:
+      - Cells
+      summary: Splits previously-merged cells back into individual cells.
+      operationId: unmergeCells
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MergeCellsRequest'
+        required: true
+      responses:
+        '200':
+          description: Cells unmerged
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/cells/move:
+    post:
+      tags:
+      - Cells
+      summary: Moves a rectangular block of cells to a new location.
+      operationId: moveCells
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoveCellsRequest'
+        required: true
+      responses:
+        '200':
+          description: Cells moved
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/cells/sql:
+    put:
+      tags:
+      - Cells
+      summary: Creates or updates a SQL code cell backed by a registered connection.
+      operationId: setSqlCell
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetSqlCellRequest'
+        required: true
+      responses:
+        '200':
+          description: SQL cell updated
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+components:
+  schemas:
+    MergeCellsRequest:
+      type: object
+      required:
+      - selection
+      properties:
+        selection:
+          type: string
+          description: A1 range to merge / unmerge.
+        sheet_name:
+          type:
+          - string
+          - 'null'
+    ErrorDetail:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
+          type: string
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
+    SetSqlCellRequest:
+      type: object
+      required:
+      - code_cell_name
+      - connection_kind
+      - code_cell_position
+      - sql_code_string
+      - connection_id
+      properties:
+        code_cell_name:
+          type: string
+        code_cell_position:
+          type: string
+        connection_id:
+          type: string
+          description: UUID of the connection in the connection service.
+        connection_kind:
+          type: string
+          description: 'Connection kind: `postgres`, `mysql`, `mssql`, `snowflake`, etc.'
+        sheet_name:
+          type:
+          - string
+          - 'null'
+        sql_code_string:
+          type: string
+    MoveCellsRequest:
+      type: object
+      required:
+      - source_selection_rect
+      - target_top_left_position
+      properties:
+        sheet_name:
+          type:
+          - string
+          - 'null'
+        source_selection_rect:
+          type: string
+          description: A1-style rectangle to move from, e.g. `A1:B10`.
+        target_top_left_position:
+          type: string
+          description: A1-style cell to anchor the moved block at.
+    SetCodeCellRequest:
+      type: object
+      required:
+      - code_cell_name
+      - code_cell_language
+      - code_cell_position
+      - code_string
+      properties:
+        code_cell_language:
+          type: string
+          description: 'Language identifier: `python`, `javascript`, or `formula`.'
+          example: python
+        code_cell_name:
+          type: string
+        code_cell_position:
+          type: string
+        code_string:
+          type: string
+        sheet_name:
+          type:
+          - string
+          - 'null'
+    SetFormulaCellsRequest:
+      type: object
+      required:
+      - formulas
+      properties:
+        formulas:
+          type: array
+          items: {}
+          description: 'Array of `{ position, formula }` (or richer) entries; the worker
+
+            validates the inner shape.'
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    DeleteCellsRequest:
+      type: object
+      required:
+      - selection
+      properties:
+        selection:
+          type: string
+        sheet_name:
+          type:
+          - string
+          - 'null'
+    RerunCodeRequest:
+      type: object
+      properties:
+        selection:
+          type:
+          - string
+          - 'null'
+          description: Optional A1 selection to limit which code cells are re-run.
+        sheet_name:
+          type:
+          - string
+          - 'null'
+    SetCellValuesRequest:
+      type: object
+      required:
+      - top_left_position
+      - cell_values
+      properties:
+        cell_values:
+          description: 2D array of values (rows of strings/numbers/booleans/etc).
+        sheet_name:
+          type:
+          - string
+          - 'null'
+        top_left_position:
+          type: string
+          description: A1-style top-left anchor for the array, e.g. `A1`.
+          example: A1
+    SetFormatsRequest:
+      type: object
+      required:
+      - formats
+      properties:
+        formats:
+          type: array
+          items: {}
+          description: 'Array of format updates. Each entry is `{ sheet_name?, selection,
+
+            bold?, italic?, underline?, strike_through?, text_color?, fill_color?,
+
+            align?, vertical_align?, wrap?, numeric_commas?, number_type?,
+
+            currency_symbol?, date_time?, font_size? }`. Colors accept hex
+
+            (`#RRGGBB`/`#RGB`), `rgb(...)`, or CSS named colors.'
+          example:
+          - selection: A1:B1
+            bold: true
+            fill_color: '#fef3c7'
+          - selection: A2:B100
+            align: right
+            number_type: currency
+            currency_symbol: $
+    SetBordersRequest:
+      type: object
+      required:
+      - borders
+      properties:
+        borders:
+          type: array
+          items: {}
+          description: 'Array of border updates. Each entry is `{ sheet_name?, selection,
+
+            color?, border_type? }`. `border_type` defaults to `"all"` when
+
+            omitted and accepts: `top`, `bottom`, `left`, `right`, `outer`,
+
+            `inner`, `horizontal`, `vertical`, `all`, `clear`. `color` accepts
+
+            hex (`#RRGGBB`/`#RGB`), `rgb(...)`, or CSS named colors and defaults
+
+            to black.'
+          example:
+          - selection: A1:C5
+            color: '#000000'
+            border_type: all
+          - selection: D1:D10
+            color: red
+            border_type: left
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: API token (qdx_live_… or qdx_test_…)
+      description: 'API tokens are minted from the Quadratic UI under Team Settings → API Tokens. Send as `Authorization: Bearer <token>`.'

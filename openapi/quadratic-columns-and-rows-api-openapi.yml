@@ -1,0 +1,570 @@
+openapi: 3.1.0
+info:
+  title: Quadratic Developer Agent Connections Columns and rows API
+  description: 'Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.
+
+
+    **Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.'
+  contact:
+    name: Quadratic
+  license:
+    name: Apache-2.0
+  version: 0.26.9
+tags:
+- name: Columns and rows
+  description: Insert, delete, and resize columns and rows.
+paths:
+  /v1/files/{file_id}/columns:
+    post:
+      tags:
+      - Columns and rows
+      summary: Inserts one or more columns at the given position.
+      operationId: insertColumns
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InsertColumnsRequest'
+        required: true
+      responses:
+        '200':
+          description: Columns inserted
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+    delete:
+      tags:
+      - Columns and rows
+      summary: Deletes the named columns from the sheet.
+      operationId: deleteColumns
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteColumnsRequest'
+        required: true
+      responses:
+        '200':
+          description: Columns deleted
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/columns/default-size:
+    put:
+      tags:
+      - Columns and rows
+      summary: 'Sets the default width for columns that haven''t been individually
+
+        resized.'
+      operationId: setDefaultColumnWidth
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetDefaultSizeRequest'
+        required: true
+      responses:
+        '200':
+          description: Default width applied
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/columns/size:
+    put:
+      tags:
+      - Columns and rows
+      summary: Resizes one or more columns to the given pixel width.
+      operationId: resizeColumns
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResizeColumnsRequest'
+        required: true
+      responses:
+        '200':
+          description: Columns resized
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/rows:
+    post:
+      tags:
+      - Columns and rows
+      summary: Inserts one or more rows at the given position.
+      operationId: insertRows
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InsertRowsRequest'
+        required: true
+      responses:
+        '200':
+          description: Rows inserted
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+    delete:
+      tags:
+      - Columns and rows
+      summary: Deletes the listed rows from the sheet.
+      operationId: deleteRows
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteRowsRequest'
+        required: true
+      responses:
+        '200':
+          description: Rows deleted
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/rows/default-size:
+    put:
+      tags:
+      - Columns and rows
+      summary: Sets the default height for rows that haven't been individually resized.
+      operationId: setDefaultRowHeight
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetDefaultSizeRequest'
+        required: true
+      responses:
+        '200':
+          description: Default height applied
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/rows/size:
+    put:
+      tags:
+      - Columns and rows
+      summary: Resizes one or more rows to the given pixel height.
+      operationId: resizeRows
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResizeRowsRequest'
+        required: true
+      responses:
+        '200':
+          description: Rows resized
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+components:
+  schemas:
+    ErrorDetail:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
+          type: string
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
+    SetDefaultSizeRequest:
+      type: object
+      required:
+      - size
+      properties:
+        sheet_name:
+          type:
+          - string
+          - 'null'
+          example: Sheet 1
+        size:
+          type: number
+          format: double
+          description: New default size in pixels.
+          example: 120.0
+    DeleteRowsRequest:
+      type: object
+      required:
+      - rows
+      properties:
+        rows:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: 1-indexed row numbers to delete.
+          example:
+          - 3
+          - 7
+          - 9
+        sheet_name:
+          type:
+          - string
+          - 'null'
+          example: Sheet 1
+    DeleteColumnsRequest:
+      type: object
+      required:
+      - columns
+      properties:
+        columns:
+          type: array
+          items:
+            type: string
+          description: Column letters to delete (e.g. `["A", "C", "F"]`).
+          example:
+          - A
+          - C
+        sheet_name:
+          type:
+          - string
+          - 'null'
+          example: Sheet 1
+    ResizeRowsRequest:
+      type: object
+      required:
+      - selection
+      - size
+      properties:
+        selection:
+          type: string
+          description: A1 selection identifying the rows (e.g. `1:5`).
+          example: '1:5'
+        sheet_name:
+          type:
+          - string
+          - 'null'
+          example: Sheet 1
+        size:
+          type: number
+          format: double
+          description: New height in pixels.
+          example: 30.0
+    InsertColumnsRequest:
+      type: object
+      required:
+      - column
+      - right
+      - count
+      properties:
+        column:
+          type: string
+          description: Column letter (e.g. `A`, `BD`) the insert is anchored at.
+          example: B
+        count:
+          type: integer
+          format: int64
+          description: Number of columns to insert.
+          example: 1
+        right:
+          type: boolean
+          description: '`true` to insert immediately to the right of `column`, `false` for
+
+            to the left.'
+          example: false
+        sheet_name:
+          type:
+          - string
+          - 'null'
+          example: Sheet 1
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    ResizeColumnsRequest:
+      type: object
+      required:
+      - selection
+      - size
+      properties:
+        selection:
+          type: string
+          description: A1 selection identifying the columns (e.g. `A:C`).
+          example: A:C
+        sheet_name:
+          type:
+          - string
+          - 'null'
+          example: Sheet 1
+        size:
+          type: number
+          format: double
+          description: New width in pixels.
+          example: 200.0
+    InsertRowsRequest:
+      type: object
+      required:
+      - row
+      - below
+      - count
+      properties:
+        below:
+          type: boolean
+          description: '`true` to insert immediately below `row`, `false` to insert above.'
+          example: false
+        count:
+          type: integer
+          format: int64
+          description: Number of rows to insert.
+          example: 1
+        row:
+          type: integer
+          format: int64
+          description: 1-indexed row number the insert is anchored at.
+          example: 5
+        sheet_name:
+          type:
+          - string
+          - 'null'
+          example: Sheet 1
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: API token (qdx_live_… or qdx_test_…)
+      description: 'API tokens are minted from the Quadratic UI under Team Settings → API Tokens. Send as `Authorization: Bearer <token>`.'

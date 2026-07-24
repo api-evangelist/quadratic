@@ -1,0 +1,191 @@
+openapi: 3.1.0
+info:
+  title: Quadratic Developer Agent Connections Conditional formats API
+  description: 'Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.
+
+
+    **Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.'
+  contact:
+    name: Quadratic
+  license:
+    name: Apache-2.0
+  version: 0.26.9
+tags:
+- name: Conditional formats
+  description: Manage conditional-format rules.
+paths:
+  /v1/files/{file_id}/conditional-formats:
+    get:
+      tags:
+      - Conditional formats
+      summary: Returns all conditional-format rules on a single sheet.
+      operationId: getConditionalFormats
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: sheet_name
+        in: query
+        required: true
+        schema:
+          type: string
+        example: Sheet 1
+      responses:
+        '200':
+          description: Conditional-format rules
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '404':
+          description: Sheet not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+    put:
+      tags:
+      - Conditional formats
+      summary: 'Creates, updates, or deletes conditional-format rules on a sheet.
+
+        Rules with `action: "delete"` only require the `id` field; `create` and
+
+        `update` rules need a `selection` plus a formula (`rule`) or a
+
+        `color_scale_thresholds` array.'
+      operationId: updateConditionalFormats
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateConditionalFormatsRequest'
+        required: true
+      responses:
+        '200':
+          description: Rules applied
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+components:
+  schemas:
+    UpdateConditionalFormatsRequest:
+      type: object
+      required:
+      - sheet_name
+      - rules
+      properties:
+        rules:
+          type: array
+          items: {}
+          description: 'Conditional-format rules to create / update / delete. Each rule is
+
+            `{ action: "create" | "update" | "delete", id?, type: "formula" |
+
+            "color_scale", selection?, rule?, bold?, italic?, fill_color?, ... }`.
+
+            `id` is required for `update`/`delete`. `selection` and either `rule`
+
+            (for formula) or `color_scale_thresholds` (for color_scale) are
+
+            required for `create`/`update`.'
+          example:
+          - action: create
+            type: formula
+            selection: A1:A100
+            rule: A1>100
+            bold: true
+            fill_color: '#fee2e2'
+          - action: create
+            type: color_scale
+            selection: B1:B100
+            color_scale_thresholds:
+            - value_type: min
+              color: '#00ff00'
+            - value_type: max
+              color: '#ff0000'
+        sheet_name:
+          type: string
+          example: Sheet 1
+    ErrorDetail:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
+          type: string
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: API token (qdx_live_… or qdx_test_…)
+      description: 'API tokens are minted from the Quadratic UI under Team Settings → API Tokens. Send as `Authorization: Bearer <token>`.'

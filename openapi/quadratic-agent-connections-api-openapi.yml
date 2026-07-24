@@ -1,0 +1,259 @@
+openapi: 3.1.0
+info:
+  title: Quadratic Developer Agent Connections API
+  description: 'Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.
+
+
+    **Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.'
+  contact:
+    name: Quadratic
+  license:
+    name: Apache-2.0
+  version: 0.26.9
+tags:
+- name: Agent Connections
+  description: List and inspect team agent connections (third-party REST API bindings).
+paths:
+  /v1/agent-connections:
+    get:
+      tags:
+      - Agent Connections
+      summary: Lists the caller's team's ready agent connections.
+      operationId: listAgentConnections
+      parameters:
+      - name: team_uuid
+        in: query
+        description: 'Team UUID that owns the connections. Defaults to the caller''s
+
+          token-scoped team when omitted.'
+        required: false
+        schema:
+          type:
+          - string
+          - 'null'
+          format: uuid
+      responses:
+        '200':
+          description: Ready agent connections for the team
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AgentConnectionSummary'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '404':
+          description: Team not found or not visible to the caller
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '500':
+          description: Database error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/agent-connections/{connection_id}:
+    get:
+      tags:
+      - Agent Connections
+      summary: 'Fetches a single agent connection by UUID, including its full plan and
+
+        apiSchema.'
+      operationId: getAgentConnection
+      parameters:
+      - name: connection_id
+        in: path
+        description: Agent connection UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: team_uuid
+        in: query
+        description: 'Team UUID that owns the connections. Defaults to the caller''s
+
+          token-scoped team when omitted.'
+        required: false
+        schema:
+          type:
+          - string
+          - 'null'
+          format: uuid
+      responses:
+        '200':
+          description: Agent connection detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentConnectionDetail'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '404':
+          description: Connection or team not found / not visible to the caller
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '500':
+          description: Database error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+components:
+  schemas:
+    ErrorDetail:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
+          type: string
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
+    AgentConnectionDetail:
+      type: object
+      description: 'Detail returned by `GET /v1/agent-connections/{connection_id}`. Includes
+
+        the full plan and apiSchema (resolved from the catalog for catalog-backed
+
+        connections whose row carries none).'
+      required:
+      - uuid
+      - name
+      - draft_status
+      - secrets
+      - bindings
+      properties:
+        api_schema:
+          description: AI-generated apiSchema describing the API's resources / endpoints.
+        auth_pattern:
+          type:
+          - string
+          - 'null'
+        base_url:
+          type:
+          - string
+          - 'null'
+        bindings:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentConnectionSecretBinding'
+        draft_status:
+          type: string
+          description: One of `setting_up`, `ready`, `abandoned`.
+        name:
+          type: string
+        plan:
+          description: Full AgentConnectionPlan JSON (auth pattern, base URL, endpoints, etc.).
+        secrets:
+          type: array
+          items:
+            type: string
+          description: '`{{SECRET_NAME}}` references to use in fetch code.'
+        service_name:
+          type:
+          - string
+          - 'null'
+        uuid:
+          type: string
+          format: uuid
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    AgentConnectionSecretBinding:
+      type: object
+      description: One `{{SECRET_NAME}}` binding exposed by a connection.
+      required:
+      - binding_name
+      - secret_name
+      - secret_kind
+      properties:
+        binding_name:
+          type: string
+          description: Logical role of the secret (e.g. "primary", "username").
+        secret_kind:
+          type: string
+          description: '`TOKEN` or `OAUTH`.'
+        secret_name:
+          type: string
+          description: SCREAMING_SNAKE_CASE secret name referenced as `{{SECRET_NAME}}`.
+    AgentConnectionSummary:
+      type: object
+      description: Summary row returned by `GET /v1/agent-connections`.
+      required:
+      - uuid
+      - name
+      - secrets
+      - bindings
+      properties:
+        auth_pattern:
+          type:
+          - string
+          - 'null'
+          description: '`plan.authPattern`, when a plan is present.'
+        base_url:
+          type:
+          - string
+          - 'null'
+          description: '`plan.baseUrl`, when a plan is present.'
+        bindings:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentConnectionSecretBinding'
+        name:
+          type: string
+        secrets:
+          type: array
+          items:
+            type: string
+          description: '`{{SECRET_NAME}}` references to use in fetch code.'
+        service_name:
+          type:
+          - string
+          - 'null'
+          description: '`plan.serviceName`, when a plan is present.'
+        uuid:
+          type: string
+          format: uuid
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: API token (qdx_live_… or qdx_test_…)
+      description: 'API tokens are minted from the Quadratic UI under Team Settings → API Tokens. Send as `Authorization: Bearer <token>`.'

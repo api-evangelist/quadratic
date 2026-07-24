@@ -1,0 +1,422 @@
+openapi: 3.1.0
+info:
+  title: Quadratic Developer Agent Connections Files API
+  description: 'Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.
+
+
+    **Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.'
+  contact:
+    name: Quadratic
+  license:
+    name: Apache-2.0
+  version: 0.26.9
+tags:
+- name: Files
+  description: Create, list, fetch, and import files.
+paths:
+  /v1/files:
+    get:
+      tags:
+      - Files
+      summary: Lists files visible to the caller across every team they belong to.
+      operationId: listFiles
+      responses:
+        '200':
+          description: Files visible to the caller
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FileSummary'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '500':
+          description: Database error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+    post:
+      tags:
+      - Files
+      summary: 'Creates a new blank file. If `team_uuid` is omitted the file is created
+
+        in the team the caller''s API token is scoped to.'
+      operationId: createFile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFileRequest'
+        required: true
+      responses:
+        '201':
+          description: File created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateFileResponse'
+        '400':
+          description: Empty `file_name` or unknown team
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '500':
+          description: Storage or database error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/import:
+    post:
+      tags:
+      - Files
+      summary: 'REST-only convenience endpoint that creates a new blank file and imports
+
+        the given bytes into it in a single request.'
+      description: 'Supported source formats (chosen by `file_name` extension): `csv`,
+
+        `xlsx`, `xls`, `parquet`, `parq`, `pqt`.'
+      operationId: importNewFile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportNewFileRequest'
+        required: true
+      responses:
+        '201':
+          description: File created and imported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportNewFileResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error during import
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}:
+    get:
+      tags:
+      - Files
+      summary: Fetches metadata for a single file by UUID.
+      operationId: getFile
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: File metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDetail'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '404':
+          description: File not found or not visible to the caller
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/import:
+    post:
+      tags:
+      - Files
+      summary: 'Imports bytes into an existing file. The file is updated in place; the
+
+        response is the worker''s import summary.'
+      description: 'Supported source formats (chosen by `file_name` extension): `csv`,
+
+        `xlsx`, `xls`, `parquet`, `parq`, `pqt`.'
+      operationId: importIntoFile
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportIntoFileRequest'
+        required: true
+      responses:
+        '200':
+          description: Import completed; worker summary
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+components:
+  schemas:
+    ImportNewFileRequest:
+      type: object
+      required:
+      - file_name
+      - file_data
+      properties:
+        file_data:
+          type: string
+          description: 'Base64-encoded bytes of the source file. Supported extensions:
+
+            `csv`, `xlsx`, `xls`, `parquet`, `parq`, `pqt`.'
+          example: TmFtZSxTY29yZQpBbGljZSw5NQpCb2IsODcK
+        file_name:
+          type: string
+          description: 'Display name for the new Quadratic file. This is distinct from the
+
+            `file_data`''s original filename — e.g. you might upload `sales.csv`
+
+            but name the Quadratic file `"2025 Sales Report"`. Must include an
+
+            extension matching the source file format (`csv`, `xlsx`, `xls`,
+
+            `parquet`, `parq`, `pqt`); the extension drives which parser is used.'
+          example: 2025 Sales Report.csv
+        insert_at:
+          type:
+          - string
+          - 'null'
+          example: A1
+        sheet_name:
+          type:
+          - string
+          - 'null'
+          example: Imports
+        team_uuid:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Optional team UUID — defaults to the caller's token-scoped team.
+    ErrorDetail:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
+          type: string
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
+    FileSummary:
+      type: object
+      description: Lightweight file row returned by `GET /v1/files`.
+      required:
+      - uuid
+      - name
+      properties:
+        name:
+          type: string
+          example: 2025 Sales Report
+        updated_date:
+          type:
+          - string
+          - 'null'
+          description: Last-modified timestamp in RFC 3339 (UTC) format.
+          example: '2025-04-29T14:32:01+00:00'
+        uuid:
+          type: string
+          format: uuid
+    CreateFileRequest:
+      type: object
+      required:
+      - file_name
+      properties:
+        file_name:
+          type: string
+          example: My new file
+        team_uuid:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: 'Optional team UUID. If omitted we default to the team the caller''s
+
+            API token is scoped to.'
+    ImportIntoFileRequest:
+      type: object
+      required:
+      - file_name
+      - file_data
+      properties:
+        file_data:
+          type: string
+          description: 'Base64-encoded bytes of the file being imported. Supported
+
+            extensions: `csv`, `xlsx`, `xls`, `parquet`, `parq`, `pqt`.'
+          example: TmFtZSxTY29yZQpBbGljZSw5NQpCb2IsODcK
+        file_name:
+          type: string
+          description: 'Original filename, including its extension. The extension determines
+
+            the parser to use, so it must be present and one of the supported
+
+            formats below.'
+          example: sales.csv
+        insert_at:
+          type:
+          - string
+          - 'null'
+          description: Optional A1 cell reference for where to place the imported data.
+          example: A1
+        sheet_name:
+          type:
+          - string
+          - 'null'
+          example: Imports
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    ImportNewFileResponse:
+      type: object
+      required:
+      - uuid
+      - name
+      - team_uuid
+      - import
+      properties:
+        import:
+          description: Worker-side import summary (raw passthrough from the worker).
+        name:
+          type: string
+        team_uuid:
+          type: string
+          format: uuid
+        uuid:
+          type: string
+          format: uuid
+    FileDetail:
+      type: object
+      description: Single file metadata returned by `GET /v1/files/{file_id}`.
+      required:
+      - uuid
+      - name
+      properties:
+        created_date:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+        updated_date:
+          type:
+          - string
+          - 'null'
+        uuid:
+          type: string
+          format: uuid
+    CreateFileResponse:
+      type: object
+      required:
+      - uuid
+      - name
+      - team_uuid
+      properties:
+        created_date:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+        team_uuid:
+          type: string
+          format: uuid
+        updated_date:
+          type:
+          - string
+          - 'null'
+        uuid:
+          type: string
+          format: uuid
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: API token (qdx_live_… or qdx_test_…)
+      description: 'API tokens are minted from the Quadratic UI under Team Settings → API Tokens. Send as `Authorization: Bearer <token>`.'

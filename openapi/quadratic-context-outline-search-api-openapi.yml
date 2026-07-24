@@ -1,0 +1,264 @@
+openapi: 3.1.0
+info:
+  title: Quadratic Developer Agent Connections Context, outline, search API
+  description: 'Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.
+
+
+    **Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.'
+  contact:
+    name: Quadratic
+  license:
+    name: Apache-2.0
+  version: 0.26.9
+tags:
+- name: Context, outline, search
+  description: Read-only exploration of file structure and contents.
+paths:
+  /v1/files/{file_id}/context:
+    get:
+      tags:
+      - Context, outline, search
+      summary: 'Returns a worker-built context blob (summary of sheets, tables, named
+
+        ranges, etc.) suitable for feeding to LLMs.'
+      operationId: getContext
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: sheet_name
+        in: query
+        description: Optional sheet to scope the context to.
+        required: false
+        schema:
+          type: string
+      - name: include_errors
+        in: query
+        description: Include code-cell errors in the context payload. Defaults to `false`.
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Spreadsheet context
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/data:
+    get:
+      tags:
+      - Context, outline, search
+      summary: Reads a tabular slice of cell data, optimized for bulk consumption.
+      operationId: readData
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: selection
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: sheet_name
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: max_rows
+        in: query
+        description: Caps the number of rows returned. Omit for the worker default.
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Tabular data
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/outline:
+    get:
+      tags:
+      - Context, outline, search
+      summary: 'Returns a structural outline of the file: sheets, named ranges,
+
+        tables, and code cells.'
+      operationId: getOutline
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: sheet_name
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Outline
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+  /v1/files/{file_id}/search:
+    get:
+      tags:
+      - Context, outline, search
+      summary: Searches cell values (and optionally code-cell source) for matches.
+      operationId: textSearch
+      parameters:
+      - name: file_id
+        in: path
+        description: File UUID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: query
+        in: query
+        description: Search term (or regex when `regex=true`).
+        required: true
+        schema:
+          type: string
+      - name: case_sensitive
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: whole_cell
+        in: query
+        description: Only match when the query covers the entire cell value.
+        required: false
+        schema:
+          type: boolean
+      - name: search_code
+        in: query
+        description: Also search inside code-cell source.
+        required: false
+        schema:
+          type: boolean
+      - name: sheet_name
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: regex
+        in: query
+        description: Treat `query` as a regular expression.
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema: {}
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '502':
+          description: Worker upstream error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+      - bearer_auth: []
+components:
+  schemas:
+    ErrorDetail:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
+          type: string
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: API token (qdx_live_… or qdx_test_…)
+      description: 'API tokens are minted from the Quadratic UI under Team Settings → API Tokens. Send as `Authorization: Bearer <token>`.'
