@@ -1,0 +1,16 @@
+generated: '2026-07-20'
+method: searched
+source: openapi/quadratic-openapi.json; https://www.quadratichq.com/spreadsheet-api
+docs: https://www.quadratichq.com/spreadsheet-api
+summary:
+  types:
+  - http
+schemes:
+- name: bearer_auth
+  type: http
+  scheme: bearer
+  bearerFormat: API token (qdx_live_… or qdx_test_…)
+  description: 'API tokens are minted from the Quadratic UI under Team Settings → API Tokens.
+    Send as `Authorization: Bearer <token>`.'
+  sources:
+  - openapi/quadratic-openapi.json

@@ -1,0 +1,40 @@
+{
+  "provider": "quadratic",
+  "sources": [
+    "quadratic-agent-connections-api-openapi.yml",
+    "quadratic-auth-api-openapi.yml",
+    "quadratic-cells-api-openapi.yml",
+    "quadratic-columns-and-rows-api-openapi.yml",
+    "quadratic-conditional-formats-api-openapi.yml",
+    "quadratic-connections-api-openapi.yml",
+    "quadratic-context-outline-search-api-openapi.yml",
+    "quadratic-documentation-api-openapi.yml",
+    "quadratic-files-api-openapi.yml",
+    "quadratic-health-api-openapi.yml",
+    "quadratic-history-api-openapi.yml",
+    "quadratic-sheets-api-openapi.yml",
+    "quadratic-tables-api-openapi.yml",
+    "quadratic-validations-api-openapi.yml"
+  ],
+  "outputs": [
+    "quadratic-agent-connections-api-openapi.yml",
+    "quadratic-auth-api-openapi.yml",
+    "quadratic-cells-api-openapi.yml",
+    "quadratic-columns-and-rows-api-openapi.yml",
+    "quadratic-conditional-formats-api-openapi.yml",
+    "quadratic-connections-api-openapi.yml",
+    "quadratic-context-outline-search-api-openapi.yml",
+    "quadratic-documentation-api-openapi.yml",
+    "quadratic-files-api-openapi.yml",
+    "quadratic-health-api-openapi.yml",
+    "quadratic-history-api-openapi.yml",
+    "quadratic-sheets-api-openapi.yml",
+    "quadratic-tables-api-openapi.yml",
+    "quadratic-validations-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

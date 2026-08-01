@@ -1,0 +1,27 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Quadratic Developer API
+  version: 1.0.0
+x-provenance:
+  generated: '2026-07-20'
+  method: generated
+  source: openapi/quadratic-openapi.json
+  extends: openapi/quadratic-openapi.json
+  note: Non-destructive overlay. The source spec ships no servers[]; the production base URL is confirmed live via GET /health returning {"status":"ok","version":"0.26.9"}.
+actions:
+- target: $
+  description: Add the production server URL (absent from the source spec).
+  update:
+    servers:
+    - url: https://developer-api.quadratichq.com
+      description: Quadratic Developer API production base URL (all /v1/* routes).
+- target: $.info
+  description: Cross-link API Evangelist supplemental artifacts.
+  update:
+    x-apievangelist:
+      authentication: authentication/quadratic-authentication.yml
+      conventions: conventions/quadratic-conventions.yml
+      errors: errors/quadratic-problem-types.yml
+      lifecycle: lifecycle/quadratic-lifecycle.yml
+      sandbox: sandbox/quadratic-sandbox.yml
+      data_model: data-model/quadratic-data-model.yml

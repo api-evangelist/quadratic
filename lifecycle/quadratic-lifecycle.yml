@@ -1,0 +1,18 @@
+generated: '2026-07-20'
+method: searched
+source: openapi/quadratic-openapi.json; https://status.quadratichq.com; https://www.quadratichq.com/spreadsheet-api
+versioning:
+  scheme: url-path
+  current_path: /v1
+  spec_version: 0.26.9
+  note: Routes are namespaced under /v1. The OpenAPI info.version (0.26.9) tracks the spec/release, confirmed live via GET /health.
+status_page:
+  url: https://status.quadratichq.com
+  present: true
+deprecation:
+  policy_documented: false
+  deprecated_operations: []
+  note: No published deprecation policy or Sunset/Deprecation (RFC 8594) headers were found; no operations are marked deprecated in the spec.
+sla:
+  documented: false
+  note: Enterprise plan advertises dedicated support; no public numeric SLA published.

@@ -1,0 +1,33 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/quadratic-openapi.json; https://www.quadratichq.com/spreadsheet-api
+auth:
+  style: bearer-token
+  header: Authorization
+  format: 'Bearer qdx_live_… | qdx_test_…'
+  scheme_ref: authentication/quadratic-authentication.yml
+pagination:
+  style: page-number
+  params:
+  - page
+  note: Collection and large-range reads (e.g. listFiles, getCells, readData) accept a `page` query parameter. `max_rows` bounds row reads.
+idempotency:
+  supported: false
+  mechanism: History operations (batch, undo, redo) provide atomic/reversible writes instead of an Idempotency-Key header.
+  ref: History tag (POST /v1/files/{file_id}/batch, /undo, /redo)
+versioning:
+  style: url-path
+  value: /v1
+  ref: lifecycle/quadratic-lifecycle.yml
+errors:
+  envelope: '{ "error": { "code", "message", "details? } }'
+  media_type: application/json
+  discriminator: error.code
+  ref: errors/quadratic-problem-types.yml
+rate_limiting:
+  signaling: undocumented
+  note: No rate-limit headers or quotas are described in the spec; AI usage is credit-metered at the plan level.
+request_tracing:
+  header: undocumented
+selection_model:
+  note: Cell operations address ranges via A1-style positions (top_left_position, selection, position) and sheet_name, a Quadratic-specific convention rather than a generic REST resource id.

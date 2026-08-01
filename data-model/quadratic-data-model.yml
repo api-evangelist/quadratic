@@ -1,0 +1,68 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/quadratic-openapi.json (components.schemas + path structure)
+entities:
+- name: File
+  id_field: file_id
+  schema: FileDetail / FileSummary
+  description: A Quadratic spreadsheet file; the top-level container addressed by file_id in every /v1/files/{file_id}/* route.
+- name: Sheet
+  id_field: sheet_name
+  description: A tab within a file, addressed by sheet_name.
+- name: Cell
+  description: A value/formula/format/border at an A1 position within a sheet; addressed by position/selection, not a stable id.
+- name: CodeCell
+  schema: SetCodeCellRequest / SetSqlCellRequest
+  description: A cell running Python, JavaScript, SQL, or a formula.
+- name: Table
+  schema: AddTableRequest
+  description: A structured data table built over a cell range within a sheet.
+- name: Validation
+  schema: AddListValidationRequest / AddLogicalValidationRequest
+  description: A data-validation rule attached to a sheet range.
+- name: ConditionalFormat
+  schema: UpdateConditionalFormatsRequest
+  description: Conditional formatting rules for a sheet range.
+- name: Connection
+  description: A database/data-source connection (PostgreSQL, MySQL, BigQuery, Snowflake, etc.) whose schemas feed SQL cells.
+- name: AgentConnection
+  id_field: connection_id
+  schema: AgentConnectionDetail / AgentConnectionSummary
+  description: A connection scoped for agent use, with secret bindings.
+- name: Team
+  id_field: team_uuid
+  description: Billing/ownership scope; API tokens are team-scoped and team_uuid parameterizes file creation.
+relationships:
+- from: Team
+  to: File
+  type: has_many
+  via: team_uuid
+- from: File
+  to: Sheet
+  type: has_many
+  via: sheet_name
+- from: Sheet
+  to: Cell
+  type: has_many
+  via: position
+- from: Sheet
+  to: Table
+  type: has_many
+  via: sheet_name
+- from: Sheet
+  to: Validation
+  type: has_many
+  via: sheet_name
+- from: Sheet
+  to: ConditionalFormat
+  type: has_many
+  via: sheet_name
+- from: CodeCell
+  to: Connection
+  type: belongs_to
+  via: connection (SQL cells)
+- from: AgentConnection
+  to: Connection
+  type: belongs_to
+  via: connection_id
+notes: Cells are positional (A1 selection) rather than id-keyed; relationships are derived from route nesting and request schemas.

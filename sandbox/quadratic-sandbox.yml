@@ -1,0 +1,14 @@
+generated: '2026-07-20'
+method: searched
+source: openapi/quadratic-openapi.json (bearer_auth.bearerFormat); https://www.quadratichq.com/spreadsheet-api
+modes:
+- name: live
+  key_prefix: qdx_live_
+  description: Production team-scoped API token minted from Team Settings -> API Tokens.
+- name: test
+  key_prefix: qdx_test_
+  description: Sandbox/test team-scoped API token; same endpoints, isolated test context.
+token_delivery: 'Authorization: Bearer <token>'
+minting: Tokens are created in the Quadratic UI under Team Settings -> API Tokens.
+test_fixtures: []
+notes: Quadratic distinguishes test vs live purely via the token prefix (qdx_test_ / qdx_live_) rather than separate base URLs. No hosted test fixtures, test clocks, or trigger tooling are published. No fabricated test values recorded.

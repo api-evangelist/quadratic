@@ -1,0 +1,33 @@
+generated: '2026-07-20'
+method: probed
+source: live HTTP probes of Quadratic hosts
+notes: No standard .well-known documents were served. mcp.quadratichq.com returns 406 (requires text/event-stream Accept) for all .well-known paths, consistent with a Streamable HTTP MCP endpoint. trust.quadratichq.com/.well-known/security.txt returns 200 but serves the Vanta trust-center SPA shell, not a real security.txt.
+probes:
+- host: quadratichq.com
+  path: /.well-known/security.txt
+  status: 404
+  file: null
+- host: www.quadratichq.com
+  path: /.well-known/security.txt
+  status: 404
+  file: null
+- host: developer-api.quadratichq.com
+  path: /.well-known/openid-configuration
+  status: 404
+  file: null
+- host: developer-api.quadratichq.com
+  path: /.well-known/oauth-authorization-server
+  status: 404
+  file: null
+- host: mcp.quadratichq.com
+  path: /.well-known/oauth-authorization-server
+  status: 406
+  file: null
+- host: mcp.quadratichq.com
+  path: /.well-known/oauth-protected-resource
+  status: 406
+  file: null
+- host: docs.quadratichq.com
+  path: /.well-known/api-catalog
+  status: 404
+  file: null

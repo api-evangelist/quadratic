@@ -1,0 +1,17 @@
+generated: '2026-07-20'
+method: searched
+source: https://trust.quadratichq.com; https://www.quadratichq.com; https://docs.quadratichq.com/quadratic-ai/security.md
+trust_center:
+  url: https://trust.quadratichq.com
+  platform: Vanta
+  present: true
+certifications:
+- name: SOC 2
+  status: certified
+  source: quadratichq.com / trust.quadratichq.com
+- name: HIPAA
+  status: compliant
+  source: quadratichq.com / trust.quadratichq.com
+security_docs:
+- https://docs.quadratichq.com/quadratic-ai/security.md
+notes: Trust center is a Vanta-hosted SPA; certification names taken from Quadratic's own public marketing/docs statements. Individual attestation reports are gated behind Vanta access request.

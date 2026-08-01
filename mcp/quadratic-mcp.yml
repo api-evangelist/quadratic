@@ -1,0 +1,28 @@
+generated: '2026-07-20'
+method: searched
+source: https://www.quadratichq.com/ai/mcp
+status: official
+name: Quadratic MCP Server
+transport: streamable-http
+remote: true
+endpoint: https://mcp.quadratichq.com/
+authentication:
+  type: oauth2
+  description: OAuth 2.0 per AI client against the user's Quadratic account; access reflects existing Quadratic permissions. No local install or API-key management required.
+clients:
+- name: Claude
+  install: OAuth authorization flow (free tier supported)
+- name: Cursor
+  install: One-click install with automatic OAuth (free tier supported)
+- name: VS Code
+  install: One-click install with automatic OAuth
+- name: ChatGPT
+  install: Custom connector via OAuth (requires Plus/Pro/Business/Enterprise)
+capabilities:
+- name: read
+  description: Access sheet values, headers, and file context from Quadratic workspaces.
+- name: write
+  description: Modify cells, add formulas, and generate charts.
+- name: compute
+  description: Execute Python, SQL, and formulas directly within Quadratic.
+notes: Remote (hosted) Streamable HTTP MCP server; the /.well-known/oauth-* endpoints require an SSE Accept header and were not machine-readable during probing.

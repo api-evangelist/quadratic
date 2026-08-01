@@ -1,0 +1,12 @@
+generated: '2026-07-20'
+method: generated
+source: openapi/quadratic-openapi.json
+api: Quadratic Developer API
+base_url: https://developer-api.quadratichq.com
+skills:
+- file: quadratic-read-spreadsheet.md
+  name: read-quadratic-spreadsheet
+  description: Explore and read data from a Quadratic spreadsheet file.
+- file: quadratic-write-and-compute.md
+  name: write-quadratic-cells-and-code
+  description: Write values and run code/SQL/formula cells in a Quadratic file.

@@ -1,0 +1,110 @@
+# Quadratic Docs
+
+## Quadratic Docs
+
+- [Getting started](https://docs.quadratichq.com/getting-started.md): The infinite spreadsheet with Python, SQL, JavaScript, and AI.
+- [Getting started](https://docs.quadratichq.com/quadratic-ai/getting-started.md): Get started generating more powerful analytics using AI.
+- [Generate code](https://docs.quadratichq.com/quadratic-ai/generate-code.md): Build analyses from scratch or edit existing code.
+- [Generate data](https://docs.quadratichq.com/quadratic-ai/generate-data.md): Insert data from AI into your sheets.
+- [Import PDFs](https://docs.quadratichq.com/quadratic-ai/import-pdfs.md): Import data from your PDFs directly into a spreadsheet.
+- [Import images](https://docs.quadratichq.com/quadratic-ai/import-images.md): Import images to Quadratic with AI.
+- [AI models](https://docs.quadratichq.com/quadratic-ai/ai-models.md)
+- [AI memory & context](https://docs.quadratichq.com/quadratic-ai/ai-memory-and-context.md)
+- [Security](https://docs.quadratichq.com/quadratic-ai/security.md): How data is handled in Quadratic AI.
+- [SQL - getting started](https://docs.quadratichq.com/connections/sql-getting-started.md)
+- [Agent connections](https://docs.quadratichq.com/connections/agent-connections.md)
+- [PostgreSQL](https://docs.quadratichq.com/connections/postgresql.md): Create your PostgreSQL connection.
+- [MySQL](https://docs.quadratichq.com/connections/mysql.md): Create your MySQL connection.
+- [MS SQL Server](https://docs.quadratichq.com/connections/ms-sql-server.md): Create your MS SQL Server connection.
+- [Supabase](https://docs.quadratichq.com/connections/supabase.md): Create your Supabase connection.
+- [BigQuery](https://docs.quadratichq.com/connections/bigquery.md): How to connect to BigQuery from Quadratic.
+- [Snowflake](https://docs.quadratichq.com/connections/snowflake.md): Create your Snowflake connection.
+- [CockroachDB](https://docs.quadratichq.com/connections/cockroachdb.md)
+- [MariaDB](https://docs.quadratichq.com/connections/mariadb.md)
+- [Neon](https://docs.quadratichq.com/connections/neon.md)
+- [Google Analytics](https://docs.quadratichq.com/connections/google-analytics.md)
+- [Mixpanel](https://docs.quadratichq.com/connections/mixpanel.md): Connect to your Mixpanel data for advanced product analytics use-cases.
+- [Parametrize queries](https://docs.quadratichq.com/connections/parametrize-queries.md): Insert data from sheet into your queries with parametrized queries.
+- [SQL AI assistant](https://docs.quadratichq.com/connections/sql-ai-assistant.md): Use the AI assistant to drastically speed up your SQL efforts.
+- [Security](https://docs.quadratichq.com/connections/security.md): Details for permissions and security of connections.
+- [API requests](https://docs.quadratichq.com/connections/api-requests.md)
+- [Request a connection](https://docs.quadratichq.com/connections/request-a-connection.md): Request a connection you'd like to see built in Quadratic.
+- [Connect via MCP](https://docs.quadratichq.com/connect-via-mcp.md)
+- [Developer API](https://docs.quadratichq.com/developer-api.md)
+- [Getting started](https://docs.quadratichq.com/python/getting-started.md): Get started writing rich Python code inside the spreadsheet.
+- [Reference cells](https://docs.quadratichq.com/python/reference-cells.md): Reference cells from Python.
+- [Return data to the sheet](https://docs.quadratichq.com/python/return-data-to-the-sheet.md): Return the data from your Python code to the spreadsheet.
+- [Packages](https://docs.quadratichq.com/python/packages.md): Using and installing Python packages.
+- [Make an API request](https://docs.quadratichq.com/python/make-an-api-request.md): Get the data you want, when you want it.
+- [Financial data](https://docs.quadratichq.com/python/financial-data.md)
+- [Clean data](https://docs.quadratichq.com/python/clean-data.md): Get your data ready for analysis.
+- [Charts/visualizations](https://docs.quadratichq.com/python/charts-visualizations.md): Glean insights from your data, visually.
+- [Manipulate data](https://docs.quadratichq.com/python/manipulate-data.md): Perform novel analysis on your data.
+- [Getting started](https://docs.quadratichq.com/javascript/getting-started.md): Get started writing JavaScript, the world's most popular programming language.
+- [Reference cells](https://docs.quadratichq.com/javascript/reference-cells.md): Reference cells from JavaScript.
+- [Return data to the sheet](https://docs.quadratichq.com/javascript/return-data-to-the-sheet.md)
+- [API Requests](https://docs.quadratichq.com/javascript/api-requests.md): How to make API requests in JavaScript.
+- [Charts/visualizations](https://docs.quadratichq.com/javascript/charts-visualizations.md)
+- [Packages](https://docs.quadratichq.com/javascript/packages.md)
+- [Getting started](https://docs.quadratichq.com/formulas/getting-started.md): Work with classic spreadsheet logic - math, references, and point and click manipulation for quick data analysis.
+- [AI assistant](https://docs.quadratichq.com/formulas/ai-assistant.md): Generate Formulas with AI.
+- [Reference cells](https://docs.quadratichq.com/formulas/reference-cells.md): Reference data in other cells from your formula.
+- [Functions and operators](https://docs.quadratichq.com/formulas/functions-and-operators.md): Using formulas in the spreadsheet.
+- [LET & LAMBDA](https://docs.quadratichq.com/formulas/let-and-lambda.md)
+- [Arrays](https://docs.quadratichq.com/formulas/arrays.md): Write formulas that operate on many cells at once.
+- [Criteria](https://docs.quadratichq.com/formulas/criteria.md): Using Criteria in formulas to match certain cells.
+- [Wildcards](https://docs.quadratichq.com/formulas/wildcards.md): Using Wildcards in formulas to match certain cells.
+- [Navigating](https://docs.quadratichq.com/spreadsheet/navigating.md): Navigate the Quadratic spreadsheet.
+- [Formula bar](https://docs.quadratichq.com/spreadsheet/formula-bar.md)
+- [Freeze panes](https://docs.quadratichq.com/spreadsheet/freeze-panes.md)
+- [Files](https://docs.quadratichq.com/spreadsheet/files.md): Files are a way to share or save your work for non-team users.
+- [Shortcuts](https://docs.quadratichq.com/spreadsheet/shortcuts.md): Shortcuts for navigating your spreadsheets faster.
+- [Insert/delete rows and columns](https://docs.quadratichq.com/spreadsheet/insert-delete-rows-and-columns.md): Insert and delete any number of rows and columns in your sheets.
+- [Data validation](https://docs.quadratichq.com/spreadsheet/data-validation.md): Use data validation to build no-code logic into your spreadsheets.
+- [Present & share](https://docs.quadratichq.com/spreadsheet/present-and-share.md): Glean insights from your data, visually.
+- [Scheduled tasks](https://docs.quadratichq.com/spreadsheet/scheduled-tasks.md): Schedule tasks to run in your spreadsheet at set intervals.
+- [Date-time formatting](https://docs.quadratichq.com/spreadsheet/date-time-formatting.md): Description of date-time formatting in Quadratic.
+- [Desktop app](https://docs.quadratichq.com/spreadsheet/desktop-app.md)
+- [Browser compatibility](https://docs.quadratichq.com/spreadsheet/browser-compatibility.md)
+- [Embedding Quadratic spreadsheets](https://docs.quadratichq.com/spreadsheet/embed.md): Embed Quadratic in other apps and websites.
+- [Manage your team](https://docs.quadratichq.com/teams/manage-your-team.md): Work together with your team and organization.
+- [Plans & billing](https://docs.quadratichq.com/teams/plans-and-billing.md)
+- [Private files](https://docs.quadratichq.com/teams/private-files.md): Details about private files in Quadratic Teams
+- [Collaboration](https://docs.quadratichq.com/teams/collaboration.md): Work together with your teammates.
+- [Embedded sheets](https://docs.quadratichq.com/teams/embedded-sheets.md): Embed your sheets for others to view and edit across the web.
+- [SQL connections](https://docs.quadratichq.com/import-data/sql-connections.md)
+- [API requests](https://docs.quadratichq.com/import-data/api-requests.md)
+- [Drag and drop .CSV](https://docs.quadratichq.com/import-data/drag-and-drop-.csv.md): Easily drag and drop your .CSV files into the spreadsheet.
+- [Drag and drop .Parquet](https://docs.quadratichq.com/import-data/drag-and-drop-.parquet.md): Easily drag and drop your .Parquet files into the spreadsheet.
+- [Import Excel files](https://docs.quadratichq.com/import-data/import-excel-files.md): Go from Excel files to Quadratic.
+- [Import Google Sheets](https://docs.quadratichq.com/import-data/import-google-sheets.md)
+- [Getting started](https://docs.quadratichq.com/self-hosting/getting-started.md): Self-host Quadratic enterprise use-cases
+- [Docker](https://docs.quadratichq.com/self-hosting/docker.md): Deploy Quadratic with Docker to almost any hardware.
+- [AWS](https://docs.quadratichq.com/self-hosting/aws.md): Deploy Quadratic to Amazon Web Services (AWS).
+- [Azure](https://docs.quadratichq.com/self-hosting/azure.md): Deploy Quadratic to your company's Azure cloud.
+- [Google Cloud Platform](https://docs.quadratichq.com/self-hosting/google-cloud-platform.md): Deploy Quadratic with to your company's Google Cloud Platform (GCP) environment.
+- [Bring your own AI](https://docs.quadratichq.com/self-hosting/bring-your-own-ai.md): How to add your AI keys to self-hosted Quadratic
+- [Other hosting](https://docs.quadratichq.com/self-hosting/other-hosting.md): Explore other deployment surfaces for Quadratic.
+- [Overview](https://docs.quadratichq.com/quadratic-for-education/overview.md): Quadratic for Education
+- [Enrolling in the education plan](https://docs.quadratichq.com/quadratic-for-education/enrolling-in-the-education-plan.md): Get onboarded to the Quadratic education program.
+- [Teachers](https://docs.quadratichq.com/quadratic-for-education/teachers.md): Access Quadratic for the classroom
+- [Students](https://docs.quadratichq.com/quadratic-for-education/students.md): Use-cases for students
+- [Researchers](https://docs.quadratichq.com/quadratic-for-education/researchers.md): Use Quadratic in the lab
+- [Education FAQ](https://docs.quadratichq.com/quadratic-for-education/education-faq.md): Learn more in the Education FAQ.
+- [Brand assets](https://docs.quadratichq.com/company/brand-assets.md): Assets for use in promotional materials
+
+
+---
+
+# Agent Instructions
+This documentation is published with GitBook. GitBook is the documentation platform designed so that both humans and AI agents can read, navigate, and reason over technical content effectively. Learn more at gitbook.com.
+
+## Querying This Documentation
+If you need additional information, you can query the documentation dynamically by asking a question.
+Perform an HTTP GET request on a page URL with the `ask` query parameter:
+```
+GET https://docs.quadratichq.com/getting-started.md?ask=<question>
+```
+The question should be specific, self-contained, and written in natural language.
+The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
+Use this mechanism when the answer is not explicitly present in the current page, you need clarification or additional context, or you want to retrieve related documentation sections.

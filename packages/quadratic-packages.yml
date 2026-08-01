@@ -1,0 +1,21 @@
+generated: '2026-07-20'
+method: searched
+source: PyPI + npm registry; https://www.quadratichq.com/spreadsheet-api
+packages:
+- name: quadratic-developer-api-client
+  registry: pypi
+  language: python
+  official: true
+  version: 0.26.1
+  url: https://pypi.org/project/quadratic-developer-api-client/
+  repository: https://github.com/quadratichq/quadratic
+  description: Token-authenticated Python client for the Quadratic Developer (Spreadsheet) API, generated from the OpenAPI spec.
+- name: '@quadratichq/developer-api-client'
+  registry: npm
+  language: typescript
+  official: true
+  version: 0.25.19
+  url: https://www.npmjs.com/package/@quadratichq/developer-api-client
+  repository: https://github.com/quadratichq/quadratic
+  description: TypeScript/JavaScript OpenAPI client for the Quadratic Developer (Spreadsheet) API.
+notes: Both clients are published under Quadratic's own registry namespaces and point at the quadratichq/quadratic monorepo; generated from openapi/quadratic-openapi.json.

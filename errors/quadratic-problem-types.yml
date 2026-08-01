@@ -1,0 +1,30 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/quadratic-openapi.json
+format: custom-json
+envelope:
+  media_type: application/json
+  shape: '{ "error": { "code": <string>, "message": <string>, "details": <optional object> } }'
+  discriminator: error.code
+  note: Stable machine-readable `error.code` string; clients should switch on it rather than parsing `message`. Not RFC 9457 (no application/problem+json).
+status_codes:
+- status: 400
+  meaning: Bad request / validation failure. `error.details` may carry structured validation context.
+  occurrences: 37
+- status: 401
+  meaning: Missing or invalid bearer token.
+  occurrences: 58
+- status: 404
+  meaning: File, sheet, or resource not found (example code `not_found`).
+  occurrences: 8
+- status: 500
+  meaning: Internal server error.
+  occurrences: 5
+- status: 502
+  meaning: Upstream/compute error (e.g. code-execution or connection backend failure).
+  occurrences: 51
+sample_codes:
+- code: not_found
+  status: 404
+  meaning: Referenced resource does not exist.
+notes: The full enumerated code list lives in the Developer API README's "Errors" section; only the `not_found` example is published inline in the spec, so remaining codes are intentionally not fabricated here.

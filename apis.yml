@@ -1,7 +1,24 @@
 aid: quadratic
 name: Quadratic
-description: 'Quadratic is a company surfaced as a portfolio company of gv and added to the API Evangelist
-  network as a stub for enrichment. Sector: ai. This profile is a lead awaiting the enrichment pipeline.'
+description: >-
+  Quadratic is an AI-native infinite spreadsheet that combines Python, SQL, JavaScript,
+  formulas, and AI agents on a single canvas, with live connections to databases like
+  PostgreSQL, MySQL, BigQuery, and Snowflake. Its token-authenticated Developer
+  (Spreadsheet) API and remote MCP server let agents and applications programmatically
+  read and write cells, run code and SQL, build tables, and orchestrate spreadsheets.
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://www.quadratichq.com/images/og-image.png
 url: https://raw.githubusercontent.com/api-evangelist/quadratic/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -11,11 +28,353 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-20'
 tags:
 - Company
-- Ai
-apis: []
+- AI
+- Spreadsheet
+- Analytics
+- Data
+- Developer Tools
+- MCP
+- Productivity
+apis:
+- aid: quadratic:quadratic-agent-connections-api
+  name: Quadratic Agent Connections API
+  description: List and inspect team agent connections (third-party REST API bindings).
+  humanURL: https://www.quadratichq.com/spreadsheet-api
+  baseURL: https://developer-api.quadratichq.com
+  tags:
+  - Agent Connections
+  properties:
+  - type: OpenAPI
+    url: openapi/quadratic-agent-connections-api-openapi.yml
+  - type: Authentication
+    url: authentication/quadratic-authentication.yml
+  - type: Conventions
+    url: conventions/quadratic-conventions.yml
+  - type: ErrorCatalog
+    url: errors/quadratic-problem-types.yml
+  - type: Sandbox
+    url: sandbox/quadratic-sandbox.yml
+  - type: DataModel
+    url: data-model/quadratic-data-model.yml
+  - type: Conformance
+    url: conformance/quadratic-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/quadratic-lifecycle.yml
+- aid: quadratic:quadratic-auth-api
+  name: Quadratic Auth API
+  description: Identity for the calling token.
+  humanURL: https://www.quadratichq.com/spreadsheet-api
+  baseURL: https://developer-api.quadratichq.com
+  tags:
+  - Auth
+  properties:
+  - type: OpenAPI
+    url: openapi/quadratic-auth-api-openapi.yml
+  - type: Authentication
+    url: authentication/quadratic-authentication.yml
+  - type: Conventions
+    url: conventions/quadratic-conventions.yml
+  - type: ErrorCatalog
+    url: errors/quadratic-problem-types.yml
+  - type: Sandbox
+    url: sandbox/quadratic-sandbox.yml
+  - type: DataModel
+    url: data-model/quadratic-data-model.yml
+  - type: Conformance
+    url: conformance/quadratic-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/quadratic-lifecycle.yml
+- aid: quadratic:quadratic-cells-api
+  name: Quadratic Cells API
+  description: Read and write cell values, code, formulas, formats, borders, and merges.
+  humanURL: https://www.quadratichq.com/spreadsheet-api
+  baseURL: https://developer-api.quadratichq.com
+  tags:
+  - Cells
+  properties:
+  - type: OpenAPI
+    url: openapi/quadratic-cells-api-openapi.yml
+  - type: Authentication
+    url: authentication/quadratic-authentication.yml
+  - type: Conventions
+    url: conventions/quadratic-conventions.yml
+  - type: ErrorCatalog
+    url: errors/quadratic-problem-types.yml
+  - type: Sandbox
+    url: sandbox/quadratic-sandbox.yml
+  - type: DataModel
+    url: data-model/quadratic-data-model.yml
+  - type: Conformance
+    url: conformance/quadratic-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/quadratic-lifecycle.yml
+- aid: quadratic:quadratic-columns-and-rows-api
+  name: Quadratic Columns and rows API
+  description: Insert, delete, and resize columns and rows.
+  humanURL: https://www.quadratichq.com/spreadsheet-api
+  baseURL: https://developer-api.quadratichq.com
+  tags:
+  - Columns and rows
+  properties:
+  - type: OpenAPI
+    url: openapi/quadratic-columns-and-rows-api-openapi.yml
+  - type: Authentication
+    url: authentication/quadratic-authentication.yml
+  - type: Conventions
+    url: conventions/quadratic-conventions.yml
+  - type: ErrorCatalog
+    url: errors/quadratic-problem-types.yml
+  - type: Sandbox
+    url: sandbox/quadratic-sandbox.yml
+  - type: DataModel
+    url: data-model/quadratic-data-model.yml
+  - type: Conformance
+    url: conformance/quadratic-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/quadratic-lifecycle.yml
+- aid: quadratic:quadratic-conditional-formats-api
+  name: Quadratic Conditional formats API
+  description: Manage conditional-format rules.
+  humanURL: https://www.quadratichq.com/spreadsheet-api
+  baseURL: https://developer-api.quadratichq.com
+  tags:
+  - Conditional formats
+  properties:
+  - type: OpenAPI
+    url: openapi/quadratic-conditional-formats-api-openapi.yml
+  - type: Authentication
+    url: authentication/quadratic-authentication.yml
+  - type: Conventions
+    url: conventions/quadratic-conventions.yml
+  - type: ErrorCatalog
+    url: errors/quadratic-problem-types.yml
+  - type: Sandbox
+    url: sandbox/quadratic-sandbox.yml
+  - type: DataModel
+    url: data-model/quadratic-data-model.yml
+  - type: Conformance
+    url: conformance/quadratic-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/quadratic-lifecycle.yml
+- aid: quadratic:quadratic-connections-api
+  name: Quadratic Connections API
+  description: Fetch schemas from registered DB connections.
+  humanURL: https://www.quadratichq.com/spreadsheet-api
+  baseURL: https://developer-api.quadratichq.com
+  tags:
+  - Connections
+  properties:
+  - type: OpenAPI
+    url: openapi/quadratic-connections-api-openapi.yml
+  - type: Authentication
+    url: authentication/quadratic-authentication.yml
+  - type: Conventions
+    url: conventions/quadratic-conventions.yml
+  - type: ErrorCatalog
+    url: errors/quadratic-problem-types.yml
+  - type: Sandbox
+    url: sandbox/quadratic-sandbox.yml
+  - type: DataModel
+    url: data-model/quadratic-data-model.yml
+  - type: Conformance
+    url: conformance/quadratic-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/quadratic-lifecycle.yml
+- aid: quadratic:quadratic-context-outline-search-api
+  name: Quadratic Context, outline, search API
+  description: Read-only exploration of file structure and contents.
+  humanURL: https://www.quadratichq.com/spreadsheet-api
+  baseURL: https://developer-api.quadratichq.com
+  tags:
+  - Context, outline, search
+  properties:
+  - type: OpenAPI
+    url: openapi/quadratic-context-outline-search-api-openapi.yml
+  - type: Authentication
+    url: authentication/quadratic-authentication.yml
+  - type: Conventions
+    url: conventions/quadratic-conventions.yml
+  - type: ErrorCatalog
+    url: errors/quadratic-problem-types.yml
+  - type: Sandbox
+    url: sandbox/quadratic-sandbox.yml
+  - type: DataModel
+    url: data-model/quadratic-data-model.yml
+  - type: Conformance
+    url: conformance/quadratic-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/quadratic-lifecycle.yml
+- aid: quadratic:quadratic-documentation-api
+  name: Quadratic Documentation API
+  description: OpenAPI spec and Scalar viewer.
+  humanURL: https://www.quadratichq.com/spreadsheet-api
+  baseURL: https://developer-api.quadratichq.com
+  tags:
+  - Documentation
+  properties:
+  - type: OpenAPI
+    url: openapi/quadratic-documentation-api-openapi.yml
+  - type: Authentication
+    url: authentication/quadratic-authentication.yml
+  - type: Conventions
+    url: conventions/quadratic-conventions.yml
+  - type: ErrorCatalog
+    url: errors/quadratic-problem-types.yml
+  - type: Sandbox
+    url: sandbox/quadratic-sandbox.yml
+  - type: DataModel
+    url: data-model/quadratic-data-model.yml
+  - type: Conformance
+    url: conformance/quadratic-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/quadratic-lifecycle.yml
+- aid: quadratic:quadratic-files-api
+  name: Quadratic Files API
+  description: Create, list, fetch, and import files.
+  humanURL: https://www.quadratichq.com/spreadsheet-api
+  baseURL: https://developer-api.quadratichq.com
+  tags:
+  - Files
+  properties:
+  - type: OpenAPI
+    url: openapi/quadratic-files-api-openapi.yml
+  - type: Authentication
+    url: authentication/quadratic-authentication.yml
+  - type: Conventions
+    url: conventions/quadratic-conventions.yml
+  - type: ErrorCatalog
+    url: errors/quadratic-problem-types.yml
+  - type: Sandbox
+    url: sandbox/quadratic-sandbox.yml
+  - type: DataModel
+    url: data-model/quadratic-data-model.yml
+  - type: Conformance
+    url: conformance/quadratic-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/quadratic-lifecycle.yml
+- aid: quadratic:quadratic-health-api
+  name: Quadratic Health API
+  description: Liveness probes.
+  humanURL: https://www.quadratichq.com/spreadsheet-api
+  baseURL: https://developer-api.quadratichq.com
+  tags:
+  - Health
+  properties:
+  - type: OpenAPI
+    url: openapi/quadratic-health-api-openapi.yml
+  - type: Authentication
+    url: authentication/quadratic-authentication.yml
+  - type: Conventions
+    url: conventions/quadratic-conventions.yml
+  - type: ErrorCatalog
+    url: errors/quadratic-problem-types.yml
+  - type: Sandbox
+    url: sandbox/quadratic-sandbox.yml
+  - type: DataModel
+    url: data-model/quadratic-data-model.yml
+  - type: Conformance
+    url: conformance/quadratic-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/quadratic-lifecycle.yml
+- aid: quadratic:quadratic-history-api
+  name: Quadratic History API
+  description: Undo, redo, and atomic batches of actions.
+  humanURL: https://www.quadratichq.com/spreadsheet-api
+  baseURL: https://developer-api.quadratichq.com
+  tags:
+  - History
+  properties:
+  - type: OpenAPI
+    url: openapi/quadratic-history-api-openapi.yml
+  - type: Authentication
+    url: authentication/quadratic-authentication.yml
+  - type: Conventions
+    url: conventions/quadratic-conventions.yml
+  - type: ErrorCatalog
+    url: errors/quadratic-problem-types.yml
+  - type: Sandbox
+    url: sandbox/quadratic-sandbox.yml
+  - type: DataModel
+    url: data-model/quadratic-data-model.yml
+  - type: Conformance
+    url: conformance/quadratic-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/quadratic-lifecycle.yml
+- aid: quadratic:quadratic-sheets-api
+  name: Quadratic Sheets API
+  description: Add, rename, delete, reorder, and recolor sheets.
+  humanURL: https://www.quadratichq.com/spreadsheet-api
+  baseURL: https://developer-api.quadratichq.com
+  tags:
+  - Sheets
+  properties:
+  - type: OpenAPI
+    url: openapi/quadratic-sheets-api-openapi.yml
+  - type: Authentication
+    url: authentication/quadratic-authentication.yml
+  - type: Conventions
+    url: conventions/quadratic-conventions.yml
+  - type: ErrorCatalog
+    url: errors/quadratic-problem-types.yml
+  - type: Sandbox
+    url: sandbox/quadratic-sandbox.yml
+  - type: DataModel
+    url: data-model/quadratic-data-model.yml
+  - type: Conformance
+    url: conformance/quadratic-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/quadratic-lifecycle.yml
+- aid: quadratic:quadratic-tables-api
+  name: Quadratic Tables API
+  description: Create, configure, and manage data tables.
+  humanURL: https://www.quadratichq.com/spreadsheet-api
+  baseURL: https://developer-api.quadratichq.com
+  tags:
+  - Tables
+  properties:
+  - type: OpenAPI
+    url: openapi/quadratic-tables-api-openapi.yml
+  - type: Authentication
+    url: authentication/quadratic-authentication.yml
+  - type: Conventions
+    url: conventions/quadratic-conventions.yml
+  - type: ErrorCatalog
+    url: errors/quadratic-problem-types.yml
+  - type: Sandbox
+    url: sandbox/quadratic-sandbox.yml
+  - type: DataModel
+    url: data-model/quadratic-data-model.yml
+  - type: Conformance
+    url: conformance/quadratic-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/quadratic-lifecycle.yml
+- aid: quadratic:quadratic-validations-api
+  name: Quadratic Validations API
+  description: Manage cell validation rules.
+  humanURL: https://www.quadratichq.com/spreadsheet-api
+  baseURL: https://developer-api.quadratichq.com
+  tags:
+  - Validations
+  properties:
+  - type: OpenAPI
+    url: openapi/quadratic-validations-api-openapi.yml
+  - type: Authentication
+    url: authentication/quadratic-authentication.yml
+  - type: Conventions
+    url: conventions/quadratic-conventions.yml
+  - type: ErrorCatalog
+    url: errors/quadratic-problem-types.yml
+  - type: Sandbox
+    url: sandbox/quadratic-sandbox.yml
+  - type: DataModel
+    url: data-model/quadratic-data-model.yml
+  - type: Conformance
+    url: conformance/quadratic-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/quadratic-lifecycle.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -24,3 +383,58 @@ maintainers:
 common:
 - type: Website
   url: https://www.quadratichq.com
+- type: DeveloperPortal
+  url: https://docs.quadratichq.com
+- type: Documentation
+  url: https://docs.quadratichq.com
+- type: APIReference
+  url: https://www.quadratichq.com/spreadsheet-api
+- type: GettingStarted
+  url: https://docs.quadratichq.com/getting-started
+- type: Blog
+  url: https://www.quadratichq.com/blog
+- type: GitHubOrganization
+  url: https://github.com/quadratichq
+- type: Pricing
+  url: https://www.quadratichq.com/pricing
+- type: SignUp
+  url: https://app.quadratichq.com
+- type: TermsOfService
+  url: https://www.quadratichq.com/terms
+- type: PrivacyPolicy
+  url: https://www.quadratichq.com/privacy
+- type: StatusPage
+  url: https://status.quadratichq.com
+- type: Lifecycle
+  url: lifecycle/quadratic-lifecycle.yml
+- type: MCPServer
+  url: mcp/quadratic-mcp.yml
+- type: LLMsTxt
+  url: llms/quadratic-llms.txt
+- type: Packages
+  url: packages/quadratic-packages.yml
+- type: SDKs
+  url: packages/quadratic-packages.yml
+- type: Conventions
+  url: conventions/quadratic-conventions.yml
+- type: DataModel
+  url: data-model/quadratic-data-model.yml
+- type: Conformance
+  url: conformance/quadratic-conformance.yml
+- type: Authentication
+  url: authentication/quadratic-authentication.yml
+- type: DomainSecurity
+  url: security/quadratic-domain-security.yml
+- type: TrustCenter
+  url: security/quadratic-trust-center.yml
+- type: Compliance
+  url: security/quadratic-trust-center.yml
+- type: WellKnown
+  url: well-known/quadratic-well-known.yml
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-07-20'
+  status: enriched
+  artifacts_added: 15
+  pass: local-v1
