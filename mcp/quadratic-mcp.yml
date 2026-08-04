@@ -1,7 +1,8 @@
 generated: '2026-07-20'
 method: searched
 source: https://www.quadratichq.com/ai/mcp
-status: official
+status: published
+status_raw: official
 name: Quadratic MCP Server
 transport: streamable-http
 remote: true
