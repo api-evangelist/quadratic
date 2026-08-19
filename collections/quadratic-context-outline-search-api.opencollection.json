@@ -1,0 +1,177 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Quadratic Developer Agent Connections Context, outline, search API",
+    "version": "0.26.9"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Context, outline, search",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns a worker-built context blob (summary of sheets, tables, named\nranges, etc.) suitable for feeding to LLMs.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/files/:file_id/context",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              },
+              {
+                "name": "sheet_name",
+                "value": "",
+                "type": "query",
+                "description": "Optional sheet to scope the context to."
+              },
+              {
+                "name": "include_errors",
+                "value": "",
+                "type": "query",
+                "description": "Include code-cell errors in the context payload. Defaults to `false`."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a worker-built context blob (summary of sheets, tables, named\nranges, etc.) suitable for feeding to LLMs."
+        },
+        {
+          "info": {
+            "name": "Reads a tabular slice of cell data, optimized for bulk consumption.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/files/:file_id/data",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              },
+              {
+                "name": "selection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sheet_name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "max_rows",
+                "value": "",
+                "type": "query",
+                "description": "Caps the number of rows returned. Omit for the worker default."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Reads a tabular slice of cell data, optimized for bulk consumption."
+        },
+        {
+          "info": {
+            "name": "Returns a structural outline of the file: sheets, named ranges,\ntables, and code cells.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/files/:file_id/outline",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              },
+              {
+                "name": "sheet_name",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a structural outline of the file: sheets, named ranges,\ntables, and code cells."
+        },
+        {
+          "info": {
+            "name": "Searches cell values (and optionally code-cell source) for matches.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/files/:file_id/search",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "Search term (or regex when `regex=true`)."
+              },
+              {
+                "name": "case_sensitive",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "whole_cell",
+                "value": "",
+                "type": "query",
+                "description": "Only match when the query covers the entire cell value."
+              },
+              {
+                "name": "search_code",
+                "value": "",
+                "type": "query",
+                "description": "Also search inside code-cell source."
+              },
+              {
+                "name": "sheet_name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "regex",
+                "value": "",
+                "type": "query",
+                "description": "Treat `query` as a regular expression."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Searches cell values (and optionally code-cell source) for matches."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

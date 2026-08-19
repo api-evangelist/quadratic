@@ -1,0 +1,99 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Quadratic Developer Agent Connections History API",
+    "version": "0.26.9"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "History",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Executes a batch of actions sequentially, stopping on the first error.\nMirrors the MCP `batch` semantics. The response is an array of\n`{action, result}` objects up to and including the failed action.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/files/:file_id/batch",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Executes a batch of actions sequentially, stopping on the first error.\nMirrors the MCP `batch` semantics. The response is an array of\n`{action, result}` objects up to and including the failed action."
+        },
+        {
+          "info": {
+            "name": "Re-applies the last `count` operations that were undone.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/files/:file_id/redo",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Re-applies the last `count` operations that were undone."
+        },
+        {
+          "info": {
+            "name": "Reverts the last `count` operations on a file.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/files/:file_id/undo",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Reverts the last `count` operations on a file."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

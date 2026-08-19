@@ -1,0 +1,249 @@
+{
+  "item": [
+    {
+      "id": "7e56f5c5-b9cc-43b3-bf93-6a58f225ba92",
+      "name": "Connections",
+      "description": {
+        "content": "Fetch schemas from registered DB connections.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "83a3a3a2-f21e-43c5-8e95-53274ce0bfd9",
+          "name": "Fetches DB schemas from the connection service. Unlike the other\nendpoints this doesn't require a worker — it talks directly to the\n`quadratic-connection` service.",
+          "request": {
+            "name": "Fetches DB schemas from the connection service. Unlike the other\nendpoints this doesn't require a worker — it talks directly to the\n`quadratic-connection` service.",
+            "description": {
+              "content": "The response is an array — one entry per requested `connection_id` —\nof either `{ connection_id, schema }` (success) or\n`{ connection_id, error }` (per-connection failure). The HTTP status\nis `200` even when individual connections fail.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "connections",
+                "schemas"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"connection_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"connection_type\": \"<string>\",\n  \"team_uuid\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "82944543-7a96-404e-b4d9-18714188cab9",
+              "name": "Per-connection schema or error array",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connections",
+                    "schemas"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"connection_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"connection_type\": \"<string>\",\n  \"team_uuid\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3f84ff94-60c1-4d6c-8db2-83dc3e3dffc0",
+              "name": "Missing or invalid token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connections",
+                    "schemas"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"connection_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"connection_type\": \"<string>\",\n  \"team_uuid\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Sheet 'Forecast' not found\",\n    \"details\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3f1e6892-b9ab-48fd-a293-54a10aa1ffbf",
+              "name": "Connection service URL not configured",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "connections",
+                    "schemas"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"connection_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"connection_type\": \"<string>\",\n  \"team_uuid\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Sheet 'Forecast' not found\",\n    \"details\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "2625004a-b5e2-400b-960f-a67f010b2d93",
+    "name": "Quadratic Developer Agent Connections API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.\n\n**Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.\n\nContact Support:\n Name: Quadratic",
+      "type": "text/plain"
+    }
+  }
+}

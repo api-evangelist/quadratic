@@ -1,0 +1,70 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Quadratic Developer Agent Connections API",
+    "version": "0.26.9"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Agent Connections",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists the caller's team's ready agent connections.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/agent-connections",
+            "params": [
+              {
+                "name": "team_uuid",
+                "value": "",
+                "type": "query",
+                "description": "Team UUID that owns the connections. Defaults to the caller's\ntoken-scoped team when omitted."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Lists the caller's team's ready agent connections."
+        },
+        {
+          "info": {
+            "name": "Fetches a single agent connection by UUID, including its full plan and\napiSchema.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/agent-connections/:connection_id",
+            "params": [
+              {
+                "name": "connection_id",
+                "value": "",
+                "type": "path",
+                "description": "Agent connection UUID"
+              },
+              {
+                "name": "team_uuid",
+                "value": "",
+                "type": "query",
+                "description": "Team UUID that owns the connections. Defaults to the caller's\ntoken-scoped team when omitted."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Fetches a single agent connection by UUID, including its full plan and\napiSchema."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

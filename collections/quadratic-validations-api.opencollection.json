@@ -1,0 +1,128 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Quadratic Developer Agent Connections Validations API",
+    "version": "0.26.9"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Validations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists all data-validation rules on a file (or one sheet).",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/files/:file_id/validations",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              },
+              {
+                "name": "sheet_name",
+                "value": "",
+                "type": "query",
+                "description": "Optional sheet to filter by. Omit to list across the whole file."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Lists all data-validation rules on a file (or one sheet)."
+        },
+        {
+          "info": {
+            "name": "Removes any data-validation rule(s) covering the given selection.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/files/:file_id/validations",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Removes any data-validation rule(s) covering the given selection."
+        },
+        {
+          "info": {
+            "name": "Adds a list-of-values validation. Either `list_source_list` or\n`list_source_selection` must be supplied (but not both).",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/files/:file_id/validations/list",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Adds a list-of-values validation. Either `list_source_list` or\n`list_source_selection` must be supplied (but not both)."
+        },
+        {
+          "info": {
+            "name": "Adds a boolean (true/false) validation rule to a selection.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/files/:file_id/validations/logical",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Adds a boolean (true/false) validation rule to a selection."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,33 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Quadratic Developer Agent Connections Auth API",
+    "version": "0.26.9"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Auth",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns identity information derived from the API token that authorized\nthis request. Useful for verifying a token works and discovering which\nteam it belongs to.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/auth/me",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns identity information derived from the API token that authorized\nthis request. Useful for verifying a token works and discovering which\nteam it belongs to."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,565 @@
+{
+  "item": [
+    {
+      "id": "3cfeae1c-0d3a-4b59-bba3-b7294b25e37a",
+      "name": "Agent Connections",
+      "description": {
+        "content": "List and inspect team agent connections (third-party REST API bindings).",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e5f800cb-03d1-4be8-9421-5cf26b66232a",
+          "name": "Lists the caller's team's ready agent connections.",
+          "request": {
+            "name": "Lists the caller's team's ready agent connections.",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "agent-connections"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "team_uuid",
+                  "value": "<string,null-uuid>",
+                  "description": "Team UUID that owns the connections. Defaults to the caller's\ntoken-scoped team when omitted."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "bf812ff4-1a1f-4af3-942c-b3aeac097145",
+              "name": "Ready agent connections for the team",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agent-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "team_uuid",
+                      "value": "<string,null-uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"uuid\": \"a02f487d-6ac9-906e-3224-07001476aab6\",\n    \"name\": \"string\",\n    \"secrets\": [\n      \"string\",\n      \"string\"\n    ],\n    \"bindings\": [\n      {\n        \"binding_name\": \"string\",\n        \"secret_name\": \"string\",\n        \"secret_kind\": \"string\"\n      },\n      {\n        \"binding_name\": \"string\",\n        \"secret_name\": \"string\",\n        \"secret_kind\": \"string\"\n      }\n    ],\n    \"auth_pattern\": \"string\",\n    \"base_url\": \"string\",\n    \"service_name\": \"string\"\n  },\n  {\n    \"uuid\": \"cab0005b-cc28-cf87-a3cf-d46bf14d5220\",\n    \"name\": \"string\",\n    \"secrets\": [\n      \"string\",\n      \"string\"\n    ],\n    \"bindings\": [\n      {\n        \"binding_name\": \"string\",\n        \"secret_name\": \"string\",\n        \"secret_kind\": \"string\"\n      },\n      {\n        \"binding_name\": \"string\",\n        \"secret_name\": \"string\",\n        \"secret_kind\": \"string\"\n      }\n    ],\n    \"auth_pattern\": \"string\",\n    \"base_url\": \"string\",\n    \"service_name\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d188acbc-3f15-4893-b56f-7162e920a2e3",
+              "name": "Missing or invalid token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agent-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "team_uuid",
+                      "value": "<string,null-uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Sheet 'Forecast' not found\",\n    \"details\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cff294ba-fded-40fc-aa70-3407b345e81f",
+              "name": "Team not found or not visible to the caller",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agent-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "team_uuid",
+                      "value": "<string,null-uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Sheet 'Forecast' not found\",\n    \"details\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b9f45bd8-32fd-4fb1-9fbb-cb5ac2423da3",
+              "name": "Database error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agent-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "team_uuid",
+                      "value": "<string,null-uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Sheet 'Forecast' not found\",\n    \"details\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d73219e7-d5ba-4193-ad20-5c048ef8ef85",
+          "name": "Fetches a single agent connection by UUID, including its full plan and\napiSchema.",
+          "request": {
+            "name": "Fetches a single agent connection by UUID, including its full plan and\napiSchema.",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "agent-connections",
+                ":connection_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "team_uuid",
+                  "value": "<string,null-uuid>",
+                  "description": "Team UUID that owns the connections. Defaults to the caller's\ntoken-scoped team when omitted."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "connection_id",
+                  "description": "(Required) Agent connection UUID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1b05ff6a-9ac3-46d3-8fc4-2482d5efbdbe",
+              "name": "Agent connection detail",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agent-connections",
+                    ":connection_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "team_uuid",
+                      "value": "<string,null-uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "connection_id",
+                      "description": "(Required) Agent connection UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"uuid\": \"97f75c50-bfb3-418e-1021-1a222b9981e0\",\n  \"name\": \"string\",\n  \"draft_status\": \"string\",\n  \"secrets\": [\n    \"string\",\n    \"string\"\n  ],\n  \"bindings\": [\n    {\n      \"binding_name\": \"string\",\n      \"secret_name\": \"string\",\n      \"secret_kind\": \"string\"\n    },\n    {\n      \"binding_name\": \"string\",\n      \"secret_name\": \"string\",\n      \"secret_kind\": \"string\"\n    }\n  ],\n  \"api_schema\": {},\n  \"auth_pattern\": \"string\",\n  \"base_url\": \"string\",\n  \"plan\": {},\n  \"service_name\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0c6b2c38-274b-45cf-97de-298b837eb0e9",
+              "name": "Missing or invalid token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agent-connections",
+                    ":connection_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "team_uuid",
+                      "value": "<string,null-uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "connection_id",
+                      "description": "(Required) Agent connection UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Sheet 'Forecast' not found\",\n    \"details\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a90e50ce-f63c-4dce-bb32-91f8141f86bd",
+              "name": "Connection or team not found / not visible to the caller",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agent-connections",
+                    ":connection_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "team_uuid",
+                      "value": "<string,null-uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "connection_id",
+                      "description": "(Required) Agent connection UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Sheet 'Forecast' not found\",\n    \"details\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7f9e6247-f8d7-4d6f-9e31-78f175e968c7",
+              "name": "Database error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "agent-connections",
+                    ":connection_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "team_uuid",
+                      "value": "<string,null-uuid>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "connection_id",
+                      "description": "(Required) Agent connection UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"not_found\",\n    \"message\": \"Sheet 'Forecast' not found\",\n    \"details\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "2124da13-9d62-4ba9-be55-9d0736d656b8",
+    "name": "Quadratic Developer Agent Connections API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.\n\n**Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.\n\nContact Support:\n Name: Quadratic",
+      "type": "text/plain"
+    }
+  }
+}

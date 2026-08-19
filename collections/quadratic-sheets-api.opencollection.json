@@ -1,0 +1,250 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Quadratic Developer Agent Connections Sheets API",
+    "version": "0.26.9"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sheets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns info for all sheets, or a single sheet when `sheet_name` is\nprovided. Read-only; dispatches via the worker's `/mcp/query` route.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/files/:file_id/sheets",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              },
+              {
+                "name": "sheet_name",
+                "value": "",
+                "type": "query",
+                "description": "Limit the response to a single sheet by name. Omit to list every\nsheet in the file."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns info for all sheets, or a single sheet when `sheet_name` is\nprovided. Read-only; dispatches via the worker's `/mcp/query` route."
+        },
+        {
+          "info": {
+            "name": "Adds a new sheet to the file.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/files/:file_id/sheets",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Adds a new sheet to the file."
+        },
+        {
+          "info": {
+            "name": "Recolors one or more sheet tabs in a single call.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/files/:file_id/sheets/colors",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Recolors one or more sheet tabs in a single call."
+        },
+        {
+          "info": {
+            "name": "Duplicates an existing sheet under a new name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/files/:file_id/sheets/duplicate",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Duplicates an existing sheet under a new name."
+        },
+        {
+          "info": {
+            "name": "Reorders sheets within a file.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/files/:file_id/sheets/move",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Reorders sheets within a file."
+        },
+        {
+          "info": {
+            "name": "Renames a sheet.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/files/:file_id/sheets/:sheet_name",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              },
+              {
+                "name": "sheet_name",
+                "value": "",
+                "type": "path",
+                "description": "Existing sheet name"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Renames a sheet."
+        },
+        {
+          "info": {
+            "name": "Deletes a sheet by name. Files must always have at least one sheet, so\nthe worker will reject deleting the last remaining sheet.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/files/:file_id/sheets/:sheet_name",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              },
+              {
+                "name": "sheet_name",
+                "value": "",
+                "type": "path",
+                "description": "Sheet name"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes a sheet by name. Files must always have at least one sheet, so\nthe worker will reject deleting the last remaining sheet."
+        },
+        {
+          "info": {
+            "name": "Sets the frozen (pinned) rows and columns for a sheet. Frozen rows always\nstart at row 1 and frozen columns always start at column 1.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/v1/files/:file_id/sheets/:sheet_name/frozen",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              },
+              {
+                "name": "sheet_name",
+                "value": "",
+                "type": "path",
+                "description": "Sheet name"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Sets the frozen (pinned) rows and columns for a sheet. Frozen rows always\nstart at row 1 and frozen columns always start at column 1."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

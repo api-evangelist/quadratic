@@ -1,0 +1,121 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Quadratic Developer Agent Connections Files API",
+    "version": "0.26.9"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Files",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists files visible to the caller across every team they belong to.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/files",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Lists files visible to the caller across every team they belong to."
+        },
+        {
+          "info": {
+            "name": "Creates a new blank file. If `team_uuid` is omitted the file is created\nin the team the caller's API token is scoped to.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/files",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new blank file. If `team_uuid` is omitted the file is created\nin the team the caller's API token is scoped to."
+        },
+        {
+          "info": {
+            "name": "REST-only convenience endpoint that creates a new blank file and imports\nthe given bytes into it in a single request.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/files/import",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Supported source formats (chosen by `file_name` extension): `csv`,\n`xlsx`, `xls`, `parquet`, `parq`, `pqt`."
+        },
+        {
+          "info": {
+            "name": "Fetches metadata for a single file by UUID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/files/:file_id",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Fetches metadata for a single file by UUID."
+        },
+        {
+          "info": {
+            "name": "Imports bytes into an existing file. The file is updated in place; the\nresponse is the worker's import summary.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/files/:file_id/import",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Supported source formats (chosen by `file_name` extension): `csv`,\n`xlsx`, `xls`, `parquet`, `parq`, `pqt`."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,499 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Quadratic Developer Agent Connections Cells API",
+    "version": "0.26.9"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cells",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Reads cell values for a selection. Read-only; dispatches via\n`/mcp/query`.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/files/:file_id/cells",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              },
+              {
+                "name": "selection",
+                "value": "A1:B10",
+                "type": "query",
+                "description": "A1-style range, e.g. `A1:B10` or `Sheet1!A1:B10`."
+              },
+              {
+                "name": "sheet_name",
+                "value": "",
+                "type": "query",
+                "description": "Optional sheet name. Defaults to the active sheet when omitted."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Zero-indexed page when the selection is paginated by the worker."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Reads cell values for a selection. Read-only; dispatches via\n`/mcp/query`."
+        },
+        {
+          "info": {
+            "name": "Writes a 2D block of values starting at `top_left_position`.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/v1/files/:file_id/cells",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Writes a 2D block of values starting at `top_left_position`."
+        },
+        {
+          "info": {
+            "name": "Deletes the contents of every cell in the selection.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/files/:file_id/cells",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes the contents of every cell in the selection."
+        },
+        {
+          "info": {
+            "name": "Applies cell borders in batch.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/v1/files/:file_id/cells/borders",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Applies cell borders in batch."
+        },
+        {
+          "info": {
+            "name": "Fetches the source and computed value of a single code cell.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/files/:file_id/cells/code",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              },
+              {
+                "name": "code_cell_position",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sheet_name",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Fetches the source and computed value of a single code cell."
+        },
+        {
+          "info": {
+            "name": "Creates or updates a Python / JavaScript / Formula code cell.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/v1/files/:file_id/cells/code",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates or updates a Python / JavaScript / Formula code cell."
+        },
+        {
+          "info": {
+            "name": "Triggers re-execution of code cells in the file (or selection).",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/files/:file_id/cells/code/rerun",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Triggers re-execution of code cells in the file (or selection)."
+        },
+        {
+          "info": {
+            "name": "Lists the formula / code-cell dependencies that flow into or out of\nthe given position.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/files/:file_id/cells/dependencies",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              },
+              {
+                "name": "position",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sheet_name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "direction",
+                "value": "both",
+                "type": "query",
+                "description": "`forward`, `reverse`, or `both`. Defaults to `both`."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Lists the formula / code-cell dependencies that flow into or out of\nthe given position."
+        },
+        {
+          "info": {
+            "name": "Reads cell formatting (font, color, alignment, etc.) for a selection.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/files/:file_id/cells/formats",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              },
+              {
+                "name": "selection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sheet_name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Reads cell formatting (font, color, alignment, etc.) for a selection."
+        },
+        {
+          "info": {
+            "name": "Applies formatting to one or more cells in a single batch.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/v1/files/:file_id/cells/formats",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Applies formatting to one or more cells in a single batch."
+        },
+        {
+          "info": {
+            "name": "Writes one or more formula cells in a single batch.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/v1/files/:file_id/cells/formula",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Writes one or more formula cells in a single batch."
+        },
+        {
+          "info": {
+            "name": "Returns whether any cell in the selection contains data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/files/:file_id/cells/has-data",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              },
+              {
+                "name": "selection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sheet_name",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns whether any cell in the selection contains data."
+        },
+        {
+          "info": {
+            "name": "Merges every cell in the selection into a single visual cell.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/files/:file_id/cells/merge",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Merges every cell in the selection into a single visual cell."
+        },
+        {
+          "info": {
+            "name": "Splits previously-merged cells back into individual cells.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/v1/files/:file_id/cells/merge",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Splits previously-merged cells back into individual cells."
+        },
+        {
+          "info": {
+            "name": "Moves a rectangular block of cells to a new location.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/files/:file_id/cells/move",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Moves a rectangular block of cells to a new location."
+        },
+        {
+          "info": {
+            "name": "Creates or updates a SQL code cell backed by a registered connection.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/v1/files/:file_id/cells/sql",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates or updates a SQL code cell backed by a registered connection."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

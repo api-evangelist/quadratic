@@ -9,7 +9,8 @@ remote: true
 endpoint: https://mcp.quadratichq.com/
 authentication:
   type: oauth2
-  description: OAuth 2.0 per AI client against the user's Quadratic account; access reflects existing Quadratic permissions. No local install or API-key management required.
+  description: OAuth 2.0 per AI client against the user's Quadratic account; access reflects existing
+    Quadratic permissions. No local install or API-key management required.
 clients:
 - name: Claude
   install: OAuth authorization flow (free tier supported)
@@ -26,4 +27,10 @@ capabilities:
   description: Modify cells, add formulas, and generate charts.
 - name: compute
   description: Execute Python, SQL, and formulas directly within Quadratic.
-notes: Remote (hosted) Streamable HTTP MCP server; the /.well-known/oauth-* endpoints require an SSE Accept header and were not machine-readable during probing.
+notes: Remote (hosted) Streamable HTTP MCP server; the /.well-known/oauth-* endpoints require an SSE Accept
+  header and were not machine-readable during probing.
+deployment:
+  mode: remote
+  verified: searched
+  checked: '2026-08-12'
+  source: catalog MCP census

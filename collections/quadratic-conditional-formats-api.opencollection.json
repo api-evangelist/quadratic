@@ -1,0 +1,73 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Quadratic Developer Agent Connections Conditional formats API",
+    "version": "0.26.9"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Conditional formats",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns all conditional-format rules on a single sheet.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/v1/files/:file_id/conditional-formats",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              },
+              {
+                "name": "sheet_name",
+                "value": "Sheet 1",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all conditional-format rules on a single sheet."
+        },
+        {
+          "info": {
+            "name": "Creates, updates, or deletes conditional-format rules on a sheet.\nRules with `action: \"delete\"` only require the `id` field; `create` and\n`update` rules need a `selection` plus a formula (`rule`) or a\n`color_scale_thresholds` array.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/v1/files/:file_id/conditional-formats",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "File UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates, updates, or deletes conditional-format rules on a sheet.\nRules with `action: \"delete\"` only require the `id` field; `create` and\n`update` rules need a `selection` plus a formula (`rule`) or a\n`color_scale_thresholds` array."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
