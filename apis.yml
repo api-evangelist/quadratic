@@ -31,6 +31,15 @@ created: '2026-07-17'
 modified: '2026-07-20'
 tags:
 - Company
+- Artificial Intelligence
+- Spreadsheet
+- Analytics
+- Data
+- Developer Tools
+- MCP
+- Productivity
+tags_raw:
+- Company
 - AI
 - Spreadsheet
 - Analytics
@@ -69,6 +78,8 @@ apis:
   humanURL: https://www.quadratichq.com/spreadsheet-api
   baseURL: https://developer-api.quadratichq.com
   tags:
+  - Authentication
+  tags_raw:
   - Auth
   properties:
   - type: OpenAPI
@@ -237,6 +248,8 @@ apis:
   humanURL: https://www.quadratichq.com/spreadsheet-api
   baseURL: https://developer-api.quadratichq.com
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
