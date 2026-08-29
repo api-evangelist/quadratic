@@ -6,6 +6,18 @@ description: >-
   PostgreSQL, MySQL, BigQuery, and Snowflake. Its token-authenticated Developer
   (Spreadsheet) API and remote MCP server let agents and applications programmatically
   read and write cells, run code and SQL, build tables, and orchestrate spreadsheets.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve
