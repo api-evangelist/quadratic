@@ -1,10 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Quadratic Developer Agent Connections Documentation API
-  description: 'Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.
-
-
-    **Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.'
+  title: Quadratic Developer Documentation API
+  description: Token-authenticated REST API for Quadratic spreadsheets.
   contact:
     name: Quadratic
   license:
@@ -18,9 +15,7 @@ paths:
     get:
       tags:
       - Documentation
-      summary: 'Serves the raw OpenAPI 3.1 spec for the developer API. The same spec
-
-        is rendered as interactive HTML at `/docs`.'
+      summary: Serves the raw OpenAPI 3.1 spec for the developer API.
       operationId: openapiSpec
       responses:
         '200':

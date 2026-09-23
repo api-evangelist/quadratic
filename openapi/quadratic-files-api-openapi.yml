@@ -1,10 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Quadratic Developer Agent Connections Files API
-  description: 'Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.
-
-
-    **Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.'
+  title: Quadratic Developer Files API
+  description: Token-authenticated REST API for Quadratic spreadsheets.
   contact:
     name: Quadratic
   license:
@@ -18,7 +15,7 @@ paths:
     get:
       tags:
       - Files
-      summary: Lists files visible to the caller across every team they belong to.
+      summary: Lists files visible to the caller across every team they belong to
       operationId: listFiles
       responses:
         '200':
@@ -46,9 +43,7 @@ paths:
     post:
       tags:
       - Files
-      summary: 'Creates a new blank file. If `team_uuid` is omitted the file is created
-
-        in the team the caller''s API token is scoped to.'
+      summary: Creates a new blank file.
       operationId: createFile
       requestBody:
         content:
@@ -87,9 +82,7 @@ paths:
     post:
       tags:
       - Files
-      summary: 'REST-only convenience endpoint that creates a new blank file and imports
-
-        the given bytes into it in a single request.'
+      summary: REST-only convenience endpoint that creates a new blank file and imports the…
       description: 'Supported source formats (chosen by `file_name` extension): `csv`,
 
         `xlsx`, `xls`, `parquet`, `parq`, `pqt`.'
@@ -131,7 +124,7 @@ paths:
     get:
       tags:
       - Files
-      summary: Fetches metadata for a single file by UUID.
+      summary: Fetches metadata for a single file by UUID
       operationId: getFile
       parameters:
       - name: file_id
@@ -166,9 +159,7 @@ paths:
     post:
       tags:
       - Files
-      summary: 'Imports bytes into an existing file. The file is updated in place; the
-
-        response is the worker''s import summary.'
+      summary: Imports bytes into an existing file.
       description: 'Supported source formats (chosen by `file_name` extension): `csv`,
 
         `xlsx`, `xls`, `parquet`, `parq`, `pqt`.'
@@ -215,6 +206,79 @@ paths:
       - bearer_auth: []
 components:
   schemas:
+    ImportIntoFileRequest:
+      type: object
+      required:
+      - file_name
+      - file_data
+      properties:
+        file_data:
+          type: string
+          description: 'Base64-encoded bytes of the file being imported. Supported
+
+            extensions: `csv`, `xlsx`, `xls`, `parquet`, `parq`, `pqt`.'
+          example: TmFtZSxTY29yZQpBbGljZSw5NQpCb2IsODcK
+        file_name:
+          type: string
+          description: 'Original filename, including its extension. The extension determines
+
+            the parser to use, so it must be present and one of the supported
+
+            formats below.'
+          example: sales.csv
+        insert_at:
+          type:
+          - string
+          - 'null'
+          description: Optional A1 cell reference for where to place the imported data.
+          example: A1
+        sheet_name:
+          type:
+          - string
+          - 'null'
+          example: Imports
+    ImportNewFileResponse:
+      type: object
+      required:
+      - uuid
+      - name
+      - team_uuid
+      - import
+      properties:
+        import:
+          description: Worker-side import summary (raw passthrough from the worker).
+        name:
+          type: string
+        team_uuid:
+          type: string
+          format: uuid
+        uuid:
+          type: string
+          format: uuid
+    ErrorDetail:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
+          type: string
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
     ImportNewFileRequest:
       type: object
       required:
@@ -255,49 +319,6 @@ components:
           - 'null'
           format: uuid
           description: Optional team UUID — defaults to the caller's token-scoped team.
-    ErrorDetail:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-          description: 'Stable machine-readable error code. Clients should switch on this
-
-            rather than parsing the human-readable `message`. See the README''s
-
-            "Errors" section for the full list of codes.'
-          example: not_found
-        details:
-          description: 'Optional structured context for the error (validation paths, worker
-
-            upstream messages, etc.). Absent when no extra context is available.'
-        message:
-          type: string
-          description: 'Human-readable description of the failure. Suitable for logs but not
-
-            guaranteed to be stable across versions.'
-          example: Sheet 'Forecast' not found
-    FileSummary:
-      type: object
-      description: Lightweight file row returned by `GET /v1/files`.
-      required:
-      - uuid
-      - name
-      properties:
-        name:
-          type: string
-          example: 2025 Sales Report
-        updated_date:
-          type:
-          - string
-          - 'null'
-          description: Last-modified timestamp in RFC 3339 (UTC) format.
-          example: '2025-04-29T14:32:01+00:00'
-        uuid:
-          type: string
-          format: uuid
     CreateFileRequest:
       type: object
       required:
@@ -314,80 +335,22 @@ components:
           description: 'Optional team UUID. If omitted we default to the team the caller''s
 
             API token is scoped to.'
-    ImportIntoFileRequest:
+    FileSummary:
       type: object
-      required:
-      - file_name
-      - file_data
-      properties:
-        file_data:
-          type: string
-          description: 'Base64-encoded bytes of the file being imported. Supported
-
-            extensions: `csv`, `xlsx`, `xls`, `parquet`, `parq`, `pqt`.'
-          example: TmFtZSxTY29yZQpBbGljZSw5NQpCb2IsODcK
-        file_name:
-          type: string
-          description: 'Original filename, including its extension. The extension determines
-
-            the parser to use, so it must be present and one of the supported
-
-            formats below.'
-          example: sales.csv
-        insert_at:
-          type:
-          - string
-          - 'null'
-          description: Optional A1 cell reference for where to place the imported data.
-          example: A1
-        sheet_name:
-          type:
-          - string
-          - 'null'
-          example: Imports
-    ErrorBody:
-      type: object
-      description: Canonical error envelope returned by every non-2xx response.
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
-    ImportNewFileResponse:
-      type: object
-      required:
-      - uuid
-      - name
-      - team_uuid
-      - import
-      properties:
-        import:
-          description: Worker-side import summary (raw passthrough from the worker).
-        name:
-          type: string
-        team_uuid:
-          type: string
-          format: uuid
-        uuid:
-          type: string
-          format: uuid
-    FileDetail:
-      type: object
-      description: Single file metadata returned by `GET /v1/files/{file_id}`.
+      description: Lightweight file row returned by `GET /v1/files`.
       required:
       - uuid
       - name
       properties:
-        created_date:
-          type:
-          - string
-          - 'null'
         name:
           type: string
+          example: 2025 Sales Report
         updated_date:
           type:
           - string
           - 'null'
+          description: Last-modified timestamp in RFC 3339 (UTC) format.
+          example: '2025-04-29T14:32:01+00:00'
         uuid:
           type: string
           format: uuid
@@ -414,6 +377,34 @@ components:
         uuid:
           type: string
           format: uuid
+    FileDetail:
+      type: object
+      description: Single file metadata returned by `GET /v1/files/{file_id}`.
+      required:
+      - uuid
+      - name
+      properties:
+        created_date:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+        updated_date:
+          type:
+          - string
+          - 'null'
+        uuid:
+          type: string
+          format: uuid
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
   securitySchemes:
     bearer_auth:
       type: http

@@ -1,10 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Quadratic Developer Agent Connections API
-  description: 'Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.
-
-
-    **Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.'
+  description: Token-authenticated REST API for Quadratic spreadsheets.
   contact:
     name: Quadratic
   license:
@@ -18,7 +15,7 @@ paths:
     get:
       tags:
       - Agent Connections
-      summary: Lists the caller's team's ready agent connections.
+      summary: Lists the caller's team's ready agent connections
       operationId: listAgentConnections
       parameters:
       - name: team_uuid
@@ -65,9 +62,7 @@ paths:
     get:
       tags:
       - Agent Connections
-      summary: 'Fetches a single agent connection by UUID, including its full plan and
-
-        apiSchema.'
+      summary: Fetches a single agent connection by UUID, including its full plan and apiSchema
       operationId: getAgentConnection
       parameters:
       - name: connection_id
@@ -117,6 +112,23 @@ paths:
       - bearer_auth: []
 components:
   schemas:
+    AgentConnectionSecretBinding:
+      type: object
+      description: One `{{SECRET_NAME}}` binding exposed by a connection.
+      required:
+      - binding_name
+      - secret_name
+      - secret_kind
+      properties:
+        binding_name:
+          type: string
+          description: Logical role of the secret (e.g. "primary", "username").
+        secret_kind:
+          type: string
+          description: '`TOKEN` or `OAUTH`.'
+        secret_name:
+          type: string
+          description: SCREAMING_SNAKE_CASE secret name referenced as `{{SECRET_NAME}}`.
     ErrorDetail:
       type: object
       required:
@@ -188,31 +200,6 @@ components:
         uuid:
           type: string
           format: uuid
-    ErrorBody:
-      type: object
-      description: Canonical error envelope returned by every non-2xx response.
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
-    AgentConnectionSecretBinding:
-      type: object
-      description: One `{{SECRET_NAME}}` binding exposed by a connection.
-      required:
-      - binding_name
-      - secret_name
-      - secret_kind
-      properties:
-        binding_name:
-          type: string
-          description: Logical role of the secret (e.g. "primary", "username").
-        secret_kind:
-          type: string
-          description: '`TOKEN` or `OAUTH`.'
-        secret_name:
-          type: string
-          description: SCREAMING_SNAKE_CASE secret name referenced as `{{SECRET_NAME}}`.
     AgentConnectionSummary:
       type: object
       description: Summary row returned by `GET /v1/agent-connections`.
@@ -251,6 +238,14 @@ components:
         uuid:
           type: string
           format: uuid
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
   securitySchemes:
     bearer_auth:
       type: http

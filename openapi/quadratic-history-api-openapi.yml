@@ -1,10 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Quadratic Developer Agent Connections History API
-  description: 'Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.
-
-
-    **Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.'
+  title: Quadratic Developer History API
+  description: Token-authenticated REST API for Quadratic spreadsheets.
   contact:
     name: Quadratic
   license:
@@ -18,11 +15,7 @@ paths:
     post:
       tags:
       - History
-      summary: 'Executes a batch of actions sequentially, stopping on the first error.
-
-        Mirrors the MCP `batch` semantics. The response is an array of
-
-        `{action, result}` objects up to and including the failed action.'
+      summary: Executes a batch of actions sequentially, stopping on the first error.
       operationId: batch
       parameters:
       - name: file_id
@@ -68,7 +61,7 @@ paths:
     post:
       tags:
       - History
-      summary: Re-applies the last `count` operations that were undone.
+      summary: Re-applies the last `count` operations that were undone
       operationId: redo
       parameters:
       - name: file_id
@@ -109,7 +102,7 @@ paths:
     post:
       tags:
       - History
-      summary: Reverts the last `count` operations on a file.
+      summary: Reverts the last `count` operations on a file
       operationId: undo
       parameters:
       - name: file_id
@@ -194,6 +187,16 @@ components:
           - action: add_sheet
             params:
               sheet_name: Sheet 2
+    UndoRedoRequest:
+      type: object
+      properties:
+        count:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          description: Number of operations to undo or redo. Defaults to `1`.
+          example: 1
     BatchItem:
       type: object
       required:
@@ -209,16 +212,6 @@ components:
           description: 'Action params object — same shape as the corresponding REST
 
             endpoint''s request body.'
-    UndoRedoRequest:
-      type: object
-      properties:
-        count:
-          type:
-          - integer
-          - 'null'
-          format: int64
-          description: Number of operations to undo or redo. Defaults to `1`.
-          example: 1
     ErrorBody:
       type: object
       description: Canonical error envelope returned by every non-2xx response.

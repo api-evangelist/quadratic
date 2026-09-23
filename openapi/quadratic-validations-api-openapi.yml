@@ -1,10 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Quadratic Developer Agent Connections Validations API
-  description: 'Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.
-
-
-    **Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.'
+  title: Quadratic Developer Validations API
+  description: Token-authenticated REST API for Quadratic spreadsheets.
   contact:
     name: Quadratic
   license:
@@ -18,7 +15,7 @@ paths:
     get:
       tags:
       - Validations
-      summary: Lists all data-validation rules on a file (or one sheet).
+      summary: Lists all data-validation rules on a file (or one sheet)
       operationId: listValidations
       parameters:
       - name: file_id
@@ -57,7 +54,7 @@ paths:
     delete:
       tags:
       - Validations
-      summary: Removes any data-validation rule(s) covering the given selection.
+      summary: Removes any data-validation rule(s) covering the given selection
       operationId: removeValidation
       parameters:
       - name: file_id
@@ -103,9 +100,7 @@ paths:
     post:
       tags:
       - Validations
-      summary: 'Adds a list-of-values validation. Either `list_source_list` or
-
-        `list_source_selection` must be supplied (but not both).'
+      summary: Adds a list-of-values validation.
       operationId: addListValidation
       parameters:
       - name: file_id
@@ -151,7 +146,7 @@ paths:
     post:
       tags:
       - Validations
-      summary: Adds a boolean (true/false) validation rule to a selection.
+      summary: Adds a boolean (true/false) validation rule to a selection
       operationId: addLogicalValidation
       parameters:
       - name: file_id
@@ -219,19 +214,6 @@ components:
 
             guaranteed to be stable across versions.'
           example: Sheet 'Forecast' not found
-    RemoveValidationRequest:
-      type: object
-      required:
-      - selection
-      properties:
-        selection:
-          type: string
-          example: A1:A20
-        sheet_name:
-          type:
-          - string
-          - 'null'
-          example: Sheet 1
     AddLogicalValidationRequest:
       type: object
       required:
@@ -258,6 +240,19 @@ components:
           - 'null'
           description: Render the cell as a checkbox when `true`.
           example: true
+    RemoveValidationRequest:
+      type: object
+      required:
+      - selection
+      properties:
+        selection:
+          type: string
+          example: A1:A20
+        sheet_name:
+          type:
+          - string
+          - 'null'
+          example: Sheet 1
     AddListValidationRequest:
       type: object
       required:

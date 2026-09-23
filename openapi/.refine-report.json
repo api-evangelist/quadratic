@@ -1,20 +1,7 @@
 {
   "provider": "quadratic",
   "sources": [
-    "quadratic-agent-connections-api-openapi.yml",
-    "quadratic-auth-api-openapi.yml",
-    "quadratic-cells-api-openapi.yml",
-    "quadratic-columns-and-rows-api-openapi.yml",
-    "quadratic-conditional-formats-api-openapi.yml",
-    "quadratic-connections-api-openapi.yml",
-    "quadratic-context-outline-search-api-openapi.yml",
-    "quadratic-documentation-api-openapi.yml",
-    "quadratic-files-api-openapi.yml",
-    "quadratic-health-api-openapi.yml",
-    "quadratic-history-api-openapi.yml",
-    "quadratic-sheets-api-openapi.yml",
-    "quadratic-tables-api-openapi.yml",
-    "quadratic-validations-api-openapi.yml"
+    "_original/quadratic-openapi.json"
   ],
   "outputs": [
     "quadratic-agent-connections-api-openapi.yml",
@@ -35,6 +22,25 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "quadratic-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "quadratic-agent-connections-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quadratic-auth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quadratic-cells-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quadratic-columns-and-rows-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quadratic-conditional-formats-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quadratic-connections-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quadratic-context-outline-search-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quadratic-documentation-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quadratic-files-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quadratic-health-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quadratic-history-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quadratic-sheets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quadratic-tables-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quadratic-validations-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

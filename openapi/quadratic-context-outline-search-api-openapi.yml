@@ -1,10 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Quadratic Developer Agent Connections Context, outline, search API
-  description: 'Token-authenticated REST API for Quadratic spreadsheets. All `/v1/*` routes require an `Authorization: Bearer <token>` header where the token is a `qdx_live_…` or `qdx_test_…` value minted from the Quadratic UI.
-
-
-    **Optional `Quadratic-Session-Id` header.** Clients may attach a UUID v4 to every request to correlate analytics events from a single integration run (one client instance, one CLI invocation, one CI job). Official SDKs generate one at construction and send it transparently; direct callers may omit it. Malformed values are dropped silently and never propagated to analytics.'
+  title: Quadratic Developer Context, outline, search API
+  description: Token-authenticated REST API for Quadratic spreadsheets.
   contact:
     name: Quadratic
   license:
@@ -18,9 +15,7 @@ paths:
     get:
       tags:
       - Context, outline, search
-      summary: 'Returns a worker-built context blob (summary of sheets, tables, named
-
-        ranges, etc.) suitable for feeding to LLMs.'
+      summary: Returns a worker-built context blob (summary of sheets, tables, named ranges…
       operationId: getContext
       parameters:
       - name: file_id
@@ -66,7 +61,7 @@ paths:
     get:
       tags:
       - Context, outline, search
-      summary: Reads a tabular slice of cell data, optimized for bulk consumption.
+      summary: Reads a tabular slice of cell data, optimized for bulk consumption
       operationId: readData
       parameters:
       - name: file_id
@@ -117,9 +112,7 @@ paths:
     get:
       tags:
       - Context, outline, search
-      summary: 'Returns a structural outline of the file: sheets, named ranges,
-
-        tables, and code cells.'
+      summary: 'Returns a structural outline of the file: sheets, named ranges, tables, and…'
       operationId: getOutline
       parameters:
       - name: file_id
@@ -158,7 +151,7 @@ paths:
     get:
       tags:
       - Context, outline, search
-      summary: Searches cell values (and optionally code-cell source) for matches.
+      summary: Searches cell values (and optionally code-cell source) for matches
       operationId: textSearch
       parameters:
       - name: file_id
