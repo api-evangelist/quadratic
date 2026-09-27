@@ -112,6 +112,44 @@ paths:
       - bearer_auth: []
 components:
   schemas:
+    AgentConnectionSummary:
+      type: object
+      description: Summary row returned by `GET /v1/agent-connections`.
+      required:
+      - uuid
+      - name
+      - secrets
+      - bindings
+      properties:
+        auth_pattern:
+          type:
+          - string
+          - 'null'
+          description: '`plan.authPattern`, when a plan is present.'
+        base_url:
+          type:
+          - string
+          - 'null'
+          description: '`plan.baseUrl`, when a plan is present.'
+        bindings:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentConnectionSecretBinding'
+        name:
+          type: string
+        secrets:
+          type: array
+          items:
+            type: string
+          description: '`{{SECRET_NAME}}` references to use in fetch code.'
+        service_name:
+          type:
+          - string
+          - 'null'
+          description: '`plan.serviceName`, when a plan is present.'
+        uuid:
+          type: string
+          format: uuid
     AgentConnectionSecretBinding:
       type: object
       description: One `{{SECRET_NAME}}` binding exposed by a connection.
@@ -129,30 +167,14 @@ components:
         secret_name:
           type: string
           description: SCREAMING_SNAKE_CASE secret name referenced as `{{SECRET_NAME}}`.
-    ErrorDetail:
+    ErrorBody:
       type: object
+      description: Canonical error envelope returned by every non-2xx response.
       required:
-      - code
-      - message
+      - error
       properties:
-        code:
-          type: string
-          description: 'Stable machine-readable error code. Clients should switch on this
-
-            rather than parsing the human-readable `message`. See the README''s
-
-            "Errors" section for the full list of codes.'
-          example: not_found
-        details:
-          description: 'Optional structured context for the error (validation paths, worker
-
-            upstream messages, etc.). Absent when no extra context is available.'
-        message:
-          type: string
-          description: 'Human-readable description of the failure. Suitable for logs but not
-
-            guaranteed to be stable across versions.'
-          example: Sheet 'Forecast' not found
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
     AgentConnectionDetail:
       type: object
       description: 'Detail returned by `GET /v1/agent-connections/{connection_id}`. Includes
@@ -200,52 +222,30 @@ components:
         uuid:
           type: string
           format: uuid
-    AgentConnectionSummary:
+    ErrorDetail:
       type: object
-      description: Summary row returned by `GET /v1/agent-connections`.
       required:
-      - uuid
-      - name
-      - secrets
-      - bindings
+      - code
+      - message
       properties:
-        auth_pattern:
-          type:
-          - string
-          - 'null'
-          description: '`plan.authPattern`, when a plan is present.'
-        base_url:
-          type:
-          - string
-          - 'null'
-          description: '`plan.baseUrl`, when a plan is present.'
-        bindings:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentConnectionSecretBinding'
-        name:
+        code:
           type: string
-        secrets:
-          type: array
-          items:
-            type: string
-          description: '`{{SECRET_NAME}}` references to use in fetch code.'
-        service_name:
-          type:
-          - string
-          - 'null'
-          description: '`plan.serviceName`, when a plan is present.'
-        uuid:
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
           type: string
-          format: uuid
-    ErrorBody:
-      type: object
-      description: Canonical error envelope returned by every non-2xx response.
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
   securitySchemes:
     bearer_auth:
       type: http

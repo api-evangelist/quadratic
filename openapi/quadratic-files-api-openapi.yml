@@ -206,6 +206,61 @@ paths:
       - bearer_auth: []
 components:
   schemas:
+    CreateFileRequest:
+      type: object
+      required:
+      - file_name
+      properties:
+        file_name:
+          type: string
+          example: My new file
+        team_uuid:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: 'Optional team UUID. If omitted we default to the team the caller''s
+
+            API token is scoped to.'
+    FileSummary:
+      type: object
+      description: Lightweight file row returned by `GET /v1/files`.
+      required:
+      - uuid
+      - name
+      properties:
+        name:
+          type: string
+          example: 2025 Sales Report
+        updated_date:
+          type:
+          - string
+          - 'null'
+          description: Last-modified timestamp in RFC 3339 (UTC) format.
+          example: '2025-04-29T14:32:01+00:00'
+        uuid:
+          type: string
+          format: uuid
+    FileDetail:
+      type: object
+      description: Single file metadata returned by `GET /v1/files/{file_id}`.
+      required:
+      - uuid
+      - name
+      properties:
+        created_date:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+        updated_date:
+          type:
+          - string
+          - 'null'
+        uuid:
+          type: string
+          format: uuid
     ImportIntoFileRequest:
       type: object
       required:
@@ -255,30 +310,6 @@ components:
         uuid:
           type: string
           format: uuid
-    ErrorDetail:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-          description: 'Stable machine-readable error code. Clients should switch on this
-
-            rather than parsing the human-readable `message`. See the README''s
-
-            "Errors" section for the full list of codes.'
-          example: not_found
-        details:
-          description: 'Optional structured context for the error (validation paths, worker
-
-            upstream messages, etc.). Absent when no extra context is available.'
-        message:
-          type: string
-          description: 'Human-readable description of the failure. Suitable for logs but not
-
-            guaranteed to be stable across versions.'
-          example: Sheet 'Forecast' not found
     ImportNewFileRequest:
       type: object
       required:
@@ -319,41 +350,14 @@ components:
           - 'null'
           format: uuid
           description: Optional team UUID — defaults to the caller's token-scoped team.
-    CreateFileRequest:
+    ErrorBody:
       type: object
+      description: Canonical error envelope returned by every non-2xx response.
       required:
-      - file_name
+      - error
       properties:
-        file_name:
-          type: string
-          example: My new file
-        team_uuid:
-          type:
-          - string
-          - 'null'
-          format: uuid
-          description: 'Optional team UUID. If omitted we default to the team the caller''s
-
-            API token is scoped to.'
-    FileSummary:
-      type: object
-      description: Lightweight file row returned by `GET /v1/files`.
-      required:
-      - uuid
-      - name
-      properties:
-        name:
-          type: string
-          example: 2025 Sales Report
-        updated_date:
-          type:
-          - string
-          - 'null'
-          description: Last-modified timestamp in RFC 3339 (UTC) format.
-          example: '2025-04-29T14:32:01+00:00'
-        uuid:
-          type: string
-          format: uuid
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
     CreateFileResponse:
       type: object
       required:
@@ -377,34 +381,30 @@ components:
         uuid:
           type: string
           format: uuid
-    FileDetail:
+    ErrorDetail:
       type: object
-      description: Single file metadata returned by `GET /v1/files/{file_id}`.
       required:
-      - uuid
-      - name
+      - code
+      - message
       properties:
-        created_date:
-          type:
-          - string
-          - 'null'
-        name:
+        code:
           type: string
-        updated_date:
-          type:
-          - string
-          - 'null'
-        uuid:
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
           type: string
-          format: uuid
-    ErrorBody:
-      type: object
-      description: Canonical error envelope returned by every non-2xx response.
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
   securitySchemes:
     bearer_auth:
       type: http
