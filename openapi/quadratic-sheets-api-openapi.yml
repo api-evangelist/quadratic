@@ -405,36 +405,24 @@ paths:
       - bearer_auth: []
 components:
   schemas:
-    AddSheetRequest:
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    DuplicateSheetRequest:
       type: object
       required:
-      - sheet_name
+      - sheet_name_to_duplicate
+      - name_of_new_sheet
       properties:
-        insert_before_sheet_name:
-          type:
-          - string
-          - 'null'
-          description: 'If set, insert the new sheet immediately before the named sheet.
-
-            Otherwise append at the end.'
-        sheet_name:
+        name_of_new_sheet:
           type: string
-    SetFrozenPanesRequest:
-      type: object
-      required:
-      - frozen_row_count
-      - frozen_column_count
-      properties:
-        frozen_column_count:
-          type: integer
-          format: int32
-          description: Number of columns to freeze (pin) starting at column 1. Use 0 to unfreeze columns.
-          minimum: 0
-        frozen_row_count:
-          type: integer
-          format: int32
-          description: Number of rows to freeze (pin) starting at row 1. Use 0 to unfreeze rows.
-          minimum: 0
+        sheet_name_to_duplicate:
+          type: string
     ColorSheetEntry:
       type: object
       required:
@@ -447,24 +435,6 @@ components:
           example: '#ff0000'
         sheet_name:
           type: string
-    DuplicateSheetRequest:
-      type: object
-      required:
-      - sheet_name_to_duplicate
-      - name_of_new_sheet
-      properties:
-        name_of_new_sheet:
-          type: string
-        sheet_name_to_duplicate:
-          type: string
-    ErrorBody:
-      type: object
-      description: Canonical error envelope returned by every non-2xx response.
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
     MoveSheetRequest:
       type: object
       required:
@@ -512,6 +482,36 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ColorSheetEntry'
+    AddSheetRequest:
+      type: object
+      required:
+      - sheet_name
+      properties:
+        insert_before_sheet_name:
+          type:
+          - string
+          - 'null'
+          description: 'If set, insert the new sheet immediately before the named sheet.
+
+            Otherwise append at the end.'
+        sheet_name:
+          type: string
+    SetFrozenPanesRequest:
+      type: object
+      required:
+      - frozen_row_count
+      - frozen_column_count
+      properties:
+        frozen_column_count:
+          type: integer
+          format: int32
+          description: Number of columns to freeze (pin) starting at column 1. Use 0 to unfreeze columns.
+          minimum: 0
+        frozen_row_count:
+          type: integer
+          format: int32
+          description: Number of rows to freeze (pin) starting at row 1. Use 0 to unfreeze rows.
+          minimum: 0
     RenameSheetRequest:
       type: object
       required:

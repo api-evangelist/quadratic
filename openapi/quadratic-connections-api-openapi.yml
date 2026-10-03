@@ -52,26 +52,6 @@ paths:
       - bearer_auth: []
 components:
   schemas:
-    GetSchemasRequest:
-      type: object
-      required:
-      - connection_ids
-      - connection_type
-      - team_uuid
-      properties:
-        connection_ids:
-          type: array
-          items:
-            type: string
-          description: Connection UUIDs to fetch schemas for, in order.
-        connection_type:
-          type: string
-          description: 'Connection kind: `postgres`, `mysql`, `mssql`, `snowflake`, etc.
-
-            Must match the kind registered for these connections.'
-        team_uuid:
-          type: string
-          description: Team UUID that owns the connections.
     ErrorDetail:
       type: object
       required:
@@ -104,6 +84,26 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/ErrorDetail'
+    GetSchemasRequest:
+      type: object
+      required:
+      - connection_ids
+      - connection_type
+      - team_uuid
+      properties:
+        connection_ids:
+          type: array
+          items:
+            type: string
+          description: Connection UUIDs to fetch schemas for, in order.
+        connection_type:
+          type: string
+          description: 'Connection kind: `postgres`, `mysql`, `mssql`, `snowflake`, etc.
+
+            Must match the kind registered for these connections.'
+        team_uuid:
+          type: string
+          description: Team UUID that owns the connections.
   securitySchemes:
     bearer_auth:
       type: http

@@ -141,21 +141,14 @@ paths:
       - bearer_auth: []
 components:
   schemas:
-    BatchItem:
+    ErrorBody:
       type: object
+      description: Canonical error envelope returned by every non-2xx response.
       required:
-      - action
+      - error
       properties:
-        action:
-          type: string
-          description: 'Action name; matches the worker tool names exposed by individual
-
-            REST endpoints (e.g. `set_cell_values`, `add_sheet`).'
-          example: set_cell_values
-        params:
-          description: 'Action params object — same shape as the corresponding REST
-
-            endpoint''s request body.'
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
     BatchRequest:
       type: object
       required:
@@ -178,24 +171,6 @@ components:
           - action: add_sheet
             params:
               sheet_name: Sheet 2
-    ErrorBody:
-      type: object
-      description: Canonical error envelope returned by every non-2xx response.
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
-    UndoRedoRequest:
-      type: object
-      properties:
-        count:
-          type:
-          - integer
-          - 'null'
-          format: int64
-          description: Number of operations to undo or redo. Defaults to `1`.
-          example: 1
     ErrorDetail:
       type: object
       required:
@@ -220,6 +195,31 @@ components:
 
             guaranteed to be stable across versions.'
           example: Sheet 'Forecast' not found
+    BatchItem:
+      type: object
+      required:
+      - action
+      properties:
+        action:
+          type: string
+          description: 'Action name; matches the worker tool names exposed by individual
+
+            REST endpoints (e.g. `set_cell_values`, `add_sheet`).'
+          example: set_cell_values
+        params:
+          description: 'Action params object — same shape as the corresponding REST
+
+            endpoint''s request body.'
+    UndoRedoRequest:
+      type: object
+      properties:
+        count:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          description: Number of operations to undo or redo. Defaults to `1`.
+          example: 1
   securitySchemes:
     bearer_auth:
       type: http

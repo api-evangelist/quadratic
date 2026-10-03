@@ -236,64 +236,6 @@ components:
         table_location:
           type: string
           description: A1 cell inside the target table (any cell within its range).
-    ConvertToTableRequest:
-      type: object
-      required:
-      - selection
-      - table_name
-      - first_row_is_column_names
-      properties:
-        first_row_is_column_names:
-          type: boolean
-        selection:
-          type: string
-        sheet_name:
-          type:
-          - string
-          - 'null'
-        table_name:
-          type: string
-    ErrorDetail:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-          description: 'Stable machine-readable error code. Clients should switch on this
-
-            rather than parsing the human-readable `message`. See the README''s
-
-            "Errors" section for the full list of codes.'
-          example: not_found
-        details:
-          description: 'Optional structured context for the error (validation paths, worker
-
-            upstream messages, etc.). Absent when no extra context is available.'
-        message:
-          type: string
-          description: 'Human-readable description of the failure. Suitable for logs but not
-
-            guaranteed to be stable across versions.'
-          example: Sheet 'Forecast' not found
-    AddTableRequest:
-      type: object
-      required:
-      - sheet_name
-      - top_left_position
-      - table_name
-      - table_data
-      properties:
-        sheet_name:
-          type: string
-        table_data:
-          description: 2D array — first row is treated as column names.
-        table_name:
-          type: string
-        top_left_position:
-          type: string
-          description: A1 anchor for the new table's top-left.
     TableColumnSettingsRequest:
       type: object
       required:
@@ -323,6 +265,64 @@ components:
           type: string
           description: A1 cell inside the target table.
           example: A1
+    AddTableRequest:
+      type: object
+      required:
+      - sheet_name
+      - top_left_position
+      - table_name
+      - table_data
+      properties:
+        sheet_name:
+          type: string
+        table_data:
+          description: 2D array — first row is treated as column names.
+        table_name:
+          type: string
+        top_left_position:
+          type: string
+          description: A1 anchor for the new table's top-left.
+    ErrorDetail:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
+          type: string
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
+    ConvertToTableRequest:
+      type: object
+      required:
+      - selection
+      - table_name
+      - first_row_is_column_names
+      properties:
+        first_row_is_column_names:
+          type: boolean
+        selection:
+          type: string
+        sheet_name:
+          type:
+          - string
+          - 'null'
+        table_name:
+          type: string
   securitySchemes:
     bearer_auth:
       type: http

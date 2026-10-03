@@ -379,36 +379,11 @@ paths:
       - bearer_auth: []
 components:
   schemas:
-    DeleteRowsRequest:
+    SetDefaultSizeRequest:
       type: object
       required:
-      - rows
-      properties:
-        rows:
-          type: array
-          items:
-            type: integer
-            format: int64
-          description: 1-indexed row numbers to delete.
-          example:
-          - 3
-          - 7
-          - 9
-        sheet_name:
-          type:
-          - string
-          - 'null'
-          example: Sheet 1
-    ResizeRowsRequest:
-      type: object
-      required:
-      - selection
       - size
       properties:
-        selection:
-          type: string
-          description: A1 selection identifying the rows (e.g. `1:5`).
-          example: '1:5'
         sheet_name:
           type:
           - string
@@ -417,28 +392,8 @@ components:
         size:
           type: number
           format: double
-          description: New height in pixels.
-          example: 30.0
-    ResizeColumnsRequest:
-      type: object
-      required:
-      - selection
-      - size
-      properties:
-        selection:
-          type: string
-          description: A1 selection identifying the columns (e.g. `A:C`).
-          example: A:C
-        sheet_name:
-          type:
-          - string
-          - 'null'
-          example: Sheet 1
-        size:
-          type: number
-          format: double
-          description: New width in pixels.
-          example: 200.0
+          description: New default size in pixels.
+          example: 120.0
     ErrorBody:
       type: object
       description: Canonical error envelope returned by every non-2xx response.
@@ -492,11 +447,36 @@ components:
           - string
           - 'null'
           example: Sheet 1
-    SetDefaultSizeRequest:
+    DeleteRowsRequest:
       type: object
       required:
+      - rows
+      properties:
+        rows:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: 1-indexed row numbers to delete.
+          example:
+          - 3
+          - 7
+          - 9
+        sheet_name:
+          type:
+          - string
+          - 'null'
+          example: Sheet 1
+    ResizeRowsRequest:
+      type: object
+      required:
+      - selection
       - size
       properties:
+        selection:
+          type: string
+          description: A1 selection identifying the rows (e.g. `1:5`).
+          example: '1:5'
         sheet_name:
           type:
           - string
@@ -505,8 +485,32 @@ components:
         size:
           type: number
           format: double
-          description: New default size in pixels.
-          example: 120.0
+          description: New height in pixels.
+          example: 30.0
+    ErrorDetail:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
+          type: string
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
     InsertRowsRequest:
       type: object
       required:
@@ -533,30 +537,26 @@ components:
           - string
           - 'null'
           example: Sheet 1
-    ErrorDetail:
+    ResizeColumnsRequest:
       type: object
       required:
-      - code
-      - message
+      - selection
+      - size
       properties:
-        code:
+        selection:
           type: string
-          description: 'Stable machine-readable error code. Clients should switch on this
-
-            rather than parsing the human-readable `message`. See the README''s
-
-            "Errors" section for the full list of codes.'
-          example: not_found
-        details:
-          description: 'Optional structured context for the error (validation paths, worker
-
-            upstream messages, etc.). Absent when no extra context is available.'
-        message:
-          type: string
-          description: 'Human-readable description of the failure. Suitable for logs but not
-
-            guaranteed to be stable across versions.'
-          example: Sheet 'Forecast' not found
+          description: A1 selection identifying the columns (e.g. `A:C`).
+          example: A:C
+        sheet_name:
+          type:
+          - string
+          - 'null'
+          example: Sheet 1
+        size:
+          type: number
+          format: double
+          description: New width in pixels.
+          example: 200.0
   securitySchemes:
     bearer_auth:
       type: http

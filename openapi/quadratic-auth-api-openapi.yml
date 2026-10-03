@@ -34,14 +34,6 @@ paths:
       - bearer_auth: []
 components:
   schemas:
-    ErrorBody:
-      type: object
-      description: Canonical error envelope returned by every non-2xx response.
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
     ErrorDetail:
       type: object
       required:
@@ -66,6 +58,14 @@ components:
 
             guaranteed to be stable across versions.'
           example: Sheet 'Forecast' not found
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
     MeResponse:
       type: object
       description: Identity of the caller derived from their API token.
