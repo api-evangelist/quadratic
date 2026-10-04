@@ -129,6 +129,30 @@ components:
         secret_name:
           type: string
           description: SCREAMING_SNAKE_CASE secret name referenced as `{{SECRET_NAME}}`.
+    ErrorDetail:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
+          type: string
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
     AgentConnectionDetail:
       type: object
       description: 'Detail returned by `GET /v1/agent-connections/{connection_id}`. Includes
@@ -184,30 +208,6 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/ErrorDetail'
-    ErrorDetail:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-          description: 'Stable machine-readable error code. Clients should switch on this
-
-            rather than parsing the human-readable `message`. See the README''s
-
-            "Errors" section for the full list of codes.'
-          example: not_found
-        details:
-          description: 'Optional structured context for the error (validation paths, worker
-
-            upstream messages, etc.). Absent when no extra context is available.'
-        message:
-          type: string
-          description: 'Human-readable description of the failure. Suitable for logs but not
-
-            guaranteed to be stable across versions.'
-          example: Sheet 'Forecast' not found
     AgentConnectionSummary:
       type: object
       description: Summary row returned by `GET /v1/agent-connections`.

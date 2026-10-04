@@ -34,6 +34,36 @@ paths:
       - bearer_auth: []
 components:
   schemas:
+    MeResponse:
+      type: object
+      description: Identity of the caller derived from their API token.
+      required:
+      - authenticated
+      - email
+      - team_uuid
+      - token_uuid
+      properties:
+        authenticated:
+          type: boolean
+          description: 'Always `true` for a successful response (the request reached the
+
+            handler, which means bearer auth passed).'
+        email:
+          type: string
+          description: Email address associated with the user that owns the API token.
+          example: alice@example.com
+        team_uuid:
+          type: string
+          format: uuid
+          description: 'UUID of the team the caller''s token is scoped to. Handlers default to
+
+            this team when one isn''t specified in the request.'
+        token_uuid:
+          type: string
+          format: uuid
+          description: 'UUID of the API token authorizing this request. Useful for clients
+
+            that want to correlate their requests to tokens in audit logs.'
     ErrorDetail:
       type: object
       required:
@@ -66,36 +96,6 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/ErrorDetail'
-    MeResponse:
-      type: object
-      description: Identity of the caller derived from their API token.
-      required:
-      - authenticated
-      - email
-      - team_uuid
-      - token_uuid
-      properties:
-        authenticated:
-          type: boolean
-          description: 'Always `true` for a successful response (the request reached the
-
-            handler, which means bearer auth passed).'
-        email:
-          type: string
-          description: Email address associated with the user that owns the API token.
-          example: alice@example.com
-        team_uuid:
-          type: string
-          format: uuid
-          description: 'UUID of the team the caller''s token is scoped to. Handlers default to
-
-            this team when one isn''t specified in the request.'
-        token_uuid:
-          type: string
-          format: uuid
-          description: 'UUID of the API token authorizing this request. Useful for clients
-
-            that want to correlate their requests to tokens in audit logs.'
   securitySchemes:
     bearer_auth:
       type: http

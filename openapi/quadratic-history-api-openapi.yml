@@ -141,36 +141,6 @@ paths:
       - bearer_auth: []
 components:
   schemas:
-    ErrorBody:
-      type: object
-      description: Canonical error envelope returned by every non-2xx response.
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
-    BatchRequest:
-      type: object
-      required:
-      - actions
-      properties:
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/BatchItem'
-          description: Ordered list of actions to execute. Stops at the first failure.
-          example:
-          - action: set_cell_values
-            params:
-              top_left_position: A1
-              cell_values:
-              - - Name
-                - Score
-              - - Alice
-                - 95
-          - action: add_sheet
-            params:
-              sheet_name: Sheet 2
     ErrorDetail:
       type: object
       required:
@@ -195,6 +165,46 @@ components:
 
             guaranteed to be stable across versions.'
           example: Sheet 'Forecast' not found
+    UndoRedoRequest:
+      type: object
+      properties:
+        count:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          description: Number of operations to undo or redo. Defaults to `1`.
+          example: 1
+    BatchRequest:
+      type: object
+      required:
+      - actions
+      properties:
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchItem'
+          description: Ordered list of actions to execute. Stops at the first failure.
+          example:
+          - action: set_cell_values
+            params:
+              top_left_position: A1
+              cell_values:
+              - - Name
+                - Score
+              - - Alice
+                - 95
+          - action: add_sheet
+            params:
+              sheet_name: Sheet 2
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
     BatchItem:
       type: object
       required:
@@ -210,16 +220,6 @@ components:
           description: 'Action params object — same shape as the corresponding REST
 
             endpoint''s request body.'
-    UndoRedoRequest:
-      type: object
-      properties:
-        count:
-          type:
-          - integer
-          - 'null'
-          format: int64
-          description: Number of operations to undo or redo. Defaults to `1`.
-          example: 1
   securitySchemes:
     bearer_auth:
       type: http

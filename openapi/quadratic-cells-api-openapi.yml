@@ -773,14 +773,31 @@ components:
         target_top_left_position:
           type: string
           description: A1-style cell to anchor the moved block at.
-    ErrorBody:
+    SetFormatsRequest:
       type: object
-      description: Canonical error envelope returned by every non-2xx response.
       required:
-      - error
+      - formats
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
+        formats:
+          type: array
+          items: {}
+          description: 'Array of format updates. Each entry is `{ sheet_name?, selection,
+
+            bold?, italic?, underline?, strike_through?, text_color?, fill_color?,
+
+            align?, vertical_align?, wrap?, numeric_commas?, number_type?,
+
+            currency_symbol?, date_time?, font_size? }`. Colors accept hex
+
+            (`#RRGGBB`/`#RGB`), `rgb(...)`, or CSS named colors.'
+          example:
+          - selection: A1:B1
+            bold: true
+            fill_color: '#fef3c7'
+          - selection: A2:B100
+            align: right
+            number_type: currency
+            currency_symbol: $
     RerunCodeRequest:
       type: object
       properties:
@@ -789,39 +806,6 @@ components:
           - string
           - 'null'
           description: Optional A1 selection to limit which code cells are re-run.
-        sheet_name:
-          type:
-          - string
-          - 'null'
-    SetCodeCellRequest:
-      type: object
-      required:
-      - code_cell_name
-      - code_cell_language
-      - code_cell_position
-      - code_string
-      properties:
-        code_cell_language:
-          type: string
-          description: 'Language identifier: `python`, `javascript`, or `formula`.'
-          example: python
-        code_cell_name:
-          type: string
-        code_cell_position:
-          type: string
-        code_string:
-          type: string
-        sheet_name:
-          type:
-          - string
-          - 'null'
-    DeleteCellsRequest:
-      type: object
-      required:
-      - selection
-      properties:
-        selection:
-          type: string
         sheet_name:
           type:
           - string
@@ -849,6 +833,30 @@ components:
           description: 'Array of `{ position, formula }` (or richer) entries; the worker
 
             validates the inner shape.'
+    ErrorDetail:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
+          type: string
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
     SetSqlCellRequest:
       type: object
       required:
@@ -874,71 +882,6 @@ components:
           - 'null'
         sql_code_string:
           type: string
-    SetCellValuesRequest:
-      type: object
-      required:
-      - top_left_position
-      - cell_values
-      properties:
-        cell_values:
-          description: 2D array of values (rows of strings/numbers/booleans/etc).
-        sheet_name:
-          type:
-          - string
-          - 'null'
-        top_left_position:
-          type: string
-          description: A1-style top-left anchor for the array, e.g. `A1`.
-          example: A1
-    SetFormatsRequest:
-      type: object
-      required:
-      - formats
-      properties:
-        formats:
-          type: array
-          items: {}
-          description: 'Array of format updates. Each entry is `{ sheet_name?, selection,
-
-            bold?, italic?, underline?, strike_through?, text_color?, fill_color?,
-
-            align?, vertical_align?, wrap?, numeric_commas?, number_type?,
-
-            currency_symbol?, date_time?, font_size? }`. Colors accept hex
-
-            (`#RRGGBB`/`#RGB`), `rgb(...)`, or CSS named colors.'
-          example:
-          - selection: A1:B1
-            bold: true
-            fill_color: '#fef3c7'
-          - selection: A2:B100
-            align: right
-            number_type: currency
-            currency_symbol: $
-    ErrorDetail:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-          description: 'Stable machine-readable error code. Clients should switch on this
-
-            rather than parsing the human-readable `message`. See the README''s
-
-            "Errors" section for the full list of codes.'
-          example: not_found
-        details:
-          description: 'Optional structured context for the error (validation paths, worker
-
-            upstream messages, etc.). Absent when no extra context is available.'
-        message:
-          type: string
-          description: 'Human-readable description of the failure. Suitable for logs but not
-
-            guaranteed to be stable across versions.'
-          example: Sheet 'Forecast' not found
     SetBordersRequest:
       type: object
       required:
@@ -965,6 +908,63 @@ components:
           - selection: D1:D10
             color: red
             border_type: left
+    SetCodeCellRequest:
+      type: object
+      required:
+      - code_cell_name
+      - code_cell_language
+      - code_cell_position
+      - code_string
+      properties:
+        code_cell_language:
+          type: string
+          description: 'Language identifier: `python`, `javascript`, or `formula`.'
+          example: python
+        code_cell_name:
+          type: string
+        code_cell_position:
+          type: string
+        code_string:
+          type: string
+        sheet_name:
+          type:
+          - string
+          - 'null'
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    DeleteCellsRequest:
+      type: object
+      required:
+      - selection
+      properties:
+        selection:
+          type: string
+        sheet_name:
+          type:
+          - string
+          - 'null'
+    SetCellValuesRequest:
+      type: object
+      required:
+      - top_left_position
+      - cell_values
+      properties:
+        cell_values:
+          description: 2D array of values (rows of strings/numbers/booleans/etc).
+        sheet_name:
+          type:
+          - string
+          - 'null'
+        top_left_position:
+          type: string
+          description: A1-style top-left anchor for the array, e.g. `A1`.
+          example: A1
   securitySchemes:
     bearer_auth:
       type: http

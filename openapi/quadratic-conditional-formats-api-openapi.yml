@@ -104,38 +104,6 @@ paths:
       - bearer_auth: []
 components:
   schemas:
-    ErrorDetail:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-          description: 'Stable machine-readable error code. Clients should switch on this
-
-            rather than parsing the human-readable `message`. See the README''s
-
-            "Errors" section for the full list of codes.'
-          example: not_found
-        details:
-          description: 'Optional structured context for the error (validation paths, worker
-
-            upstream messages, etc.). Absent when no extra context is available.'
-        message:
-          type: string
-          description: 'Human-readable description of the failure. Suitable for logs but not
-
-            guaranteed to be stable across versions.'
-          example: Sheet 'Forecast' not found
-    ErrorBody:
-      type: object
-      description: Canonical error envelope returned by every non-2xx response.
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
     UpdateConditionalFormatsRequest:
       type: object
       required:
@@ -174,6 +142,38 @@ components:
         sheet_name:
           type: string
           example: Sheet 1
+    ErrorDetail:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'Stable machine-readable error code. Clients should switch on this
+
+            rather than parsing the human-readable `message`. See the README''s
+
+            "Errors" section for the full list of codes.'
+          example: not_found
+        details:
+          description: 'Optional structured context for the error (validation paths, worker
+
+            upstream messages, etc.). Absent when no extra context is available.'
+        message:
+          type: string
+          description: 'Human-readable description of the failure. Suitable for logs but not
+
+            guaranteed to be stable across versions.'
+          example: Sheet 'Forecast' not found
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
   securitySchemes:
     bearer_auth:
       type: http

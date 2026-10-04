@@ -196,46 +196,6 @@ paths:
       - bearer_auth: []
 components:
   schemas:
-    ErrorBody:
-      type: object
-      description: Canonical error envelope returned by every non-2xx response.
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
-    TableMetaRequest:
-      type: object
-      required:
-      - table_location
-      properties:
-        alternating_row_colors:
-          type:
-          - boolean
-          - 'null'
-        first_row_is_column_names:
-          type:
-          - boolean
-          - 'null'
-        new_table_name:
-          type:
-          - string
-          - 'null'
-        sheet_name:
-          type:
-          - string
-          - 'null'
-        show_columns:
-          type:
-          - boolean
-          - 'null'
-        show_name:
-          type:
-          - boolean
-          - 'null'
-        table_location:
-          type: string
-          description: A1 cell inside the target table (any cell within its range).
     TableColumnSettingsRequest:
       type: object
       required:
@@ -265,6 +225,23 @@ components:
           type: string
           description: A1 cell inside the target table.
           example: A1
+    ConvertToTableRequest:
+      type: object
+      required:
+      - selection
+      - table_name
+      - first_row_is_column_names
+      properties:
+        first_row_is_column_names:
+          type: boolean
+        selection:
+          type: string
+        sheet_name:
+          type:
+          - string
+          - 'null'
+        table_name:
+          type: string
     AddTableRequest:
       type: object
       required:
@@ -306,23 +283,46 @@ components:
 
             guaranteed to be stable across versions.'
           example: Sheet 'Forecast' not found
-    ConvertToTableRequest:
+    TableMetaRequest:
       type: object
       required:
-      - selection
-      - table_name
-      - first_row_is_column_names
+      - table_location
       properties:
+        alternating_row_colors:
+          type:
+          - boolean
+          - 'null'
         first_row_is_column_names:
-          type: boolean
-        selection:
-          type: string
+          type:
+          - boolean
+          - 'null'
+        new_table_name:
+          type:
+          - string
+          - 'null'
         sheet_name:
           type:
           - string
           - 'null'
-        table_name:
+        show_columns:
+          type:
+          - boolean
+          - 'null'
+        show_name:
+          type:
+          - boolean
+          - 'null'
+        table_location:
           type: string
+          description: A1 cell inside the target table (any cell within its range).
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
   securitySchemes:
     bearer_auth:
       type: http
