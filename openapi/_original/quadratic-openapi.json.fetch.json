@@ -1,0 +1,12 @@
+{
+ "url": "https://developer-api.quadratichq.com/openapi.json",
+ "requested_url": "https://developer-api.quadratichq.com/openapi.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 82295,
+ "sha256": "7e128e01754b1f65b0cc9b70ff0ab9bcaf57c6407a4439469308f29787ef50de",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 0.984), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
