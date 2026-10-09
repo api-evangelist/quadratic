@@ -1,0 +1,85 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-07'
+method: searched
+source: https://www.quadratichq.com/pricing
+sources:
+- https://www.quadratichq.com/pricing
+provenance:
+  tool: all/0-working/economics/harvest_pricing.py
+  run: 20261007T104522
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: per-seat
+delivery:
+  delivery: managed+licensed
+  method: page
+  read: '2026-10-07'
+  evidence: Self-hosting option
+  managed_tier: Pro
+published: true
+note: Yearly pricing shown (save 10%); Enterprise is contact-us with self-hosting option.
+plan_count: 4
+currency: USD
+plans:
+- name: Personal
+  price_text: Free
+  period: none
+  included_quota: Limited AI usage; Limited sharing, files, and connections; Limited support
+- name: Pro
+  price_text: $18
+  price: 18
+  currency: USD
+  period: month
+  unit: /user/month, billed annually
+  included_quota: $20 in AI credits / month; access to additional models; unlimited sharing, files, and
+    connections
+- name: Business
+  price_text: $36
+  price: 36
+  currency: USD
+  period: month
+  unit: /user/month, billed annually
+  included_quota: $40 in AI credits / month; everything in Pro
+  overage: Purchase additional AI credits on-demand
+- name: Enterprise
+  price_text: Custom
+  period: none
+  included_quota: Custom AI usage, SSO, Self-hosting option, Dedicated support
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - hybrid
+  - subscription
+  units: []
+  plans:
+  - name: Personal
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - none
+  - name: Pro
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - month
+  - name: Business
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - other
+    periods:
+    - month
+  - name: Enterprise
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - none
