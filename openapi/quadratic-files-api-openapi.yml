@@ -206,6 +206,87 @@ paths:
       - bearer_auth: []
 components:
   schemas:
+    CreateFileRequest:
+      type: object
+      required:
+      - file_name
+      properties:
+        file_name:
+          type: string
+          example: My new file
+        team_uuid:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: 'Optional team UUID. If omitted we default to the team the caller''s
+
+            API token is scoped to.'
+    ImportNewFileResponse:
+      type: object
+      required:
+      - uuid
+      - name
+      - team_uuid
+      - import
+      properties:
+        import:
+          description: Worker-side import summary (raw passthrough from the worker).
+        name:
+          type: string
+        team_uuid:
+          type: string
+          format: uuid
+        uuid:
+          type: string
+          format: uuid
+    FileDetail:
+      type: object
+      description: Single file metadata returned by `GET /v1/files/{file_id}`.
+      required:
+      - uuid
+      - name
+      properties:
+        created_date:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+        updated_date:
+          type:
+          - string
+          - 'null'
+        uuid:
+          type: string
+          format: uuid
+    FileSummary:
+      type: object
+      description: Lightweight file row returned by `GET /v1/files`.
+      required:
+      - uuid
+      - name
+      properties:
+        name:
+          type: string
+          example: 2025 Sales Report
+        updated_date:
+          type:
+          - string
+          - 'null'
+          description: Last-modified timestamp in RFC 3339 (UTC) format.
+          example: '2025-04-29T14:32:01+00:00'
+        uuid:
+          type: string
+          format: uuid
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
     ImportIntoFileRequest:
       type: object
       required:
@@ -237,12 +318,12 @@ components:
           - string
           - 'null'
           example: Imports
-    FileDetail:
+    CreateFileResponse:
       type: object
-      description: Single file metadata returned by `GET /v1/files/{file_id}`.
       required:
       - uuid
       - name
+      - team_uuid
       properties:
         created_date:
           type:
@@ -250,6 +331,9 @@ components:
           - 'null'
         name:
           type: string
+        team_uuid:
+          type: string
+          format: uuid
         updated_date:
           type:
           - string
@@ -281,41 +365,6 @@ components:
 
             guaranteed to be stable across versions.'
           example: Sheet 'Forecast' not found
-    FileSummary:
-      type: object
-      description: Lightweight file row returned by `GET /v1/files`.
-      required:
-      - uuid
-      - name
-      properties:
-        name:
-          type: string
-          example: 2025 Sales Report
-        updated_date:
-          type:
-          - string
-          - 'null'
-          description: Last-modified timestamp in RFC 3339 (UTC) format.
-          example: '2025-04-29T14:32:01+00:00'
-        uuid:
-          type: string
-          format: uuid
-    CreateFileRequest:
-      type: object
-      required:
-      - file_name
-      properties:
-        file_name:
-          type: string
-          example: My new file
-        team_uuid:
-          type:
-          - string
-          - 'null'
-          format: uuid
-          description: 'Optional team UUID. If omitted we default to the team the caller''s
-
-            API token is scoped to.'
     ImportNewFileRequest:
       type: object
       required:
@@ -356,55 +405,6 @@ components:
           - 'null'
           format: uuid
           description: Optional team UUID — defaults to the caller's token-scoped team.
-    ErrorBody:
-      type: object
-      description: Canonical error envelope returned by every non-2xx response.
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
-    ImportNewFileResponse:
-      type: object
-      required:
-      - uuid
-      - name
-      - team_uuid
-      - import
-      properties:
-        import:
-          description: Worker-side import summary (raw passthrough from the worker).
-        name:
-          type: string
-        team_uuid:
-          type: string
-          format: uuid
-        uuid:
-          type: string
-          format: uuid
-    CreateFileResponse:
-      type: object
-      required:
-      - uuid
-      - name
-      - team_uuid
-      properties:
-        created_date:
-          type:
-          - string
-          - 'null'
-        name:
-          type: string
-        team_uuid:
-          type: string
-          format: uuid
-        updated_date:
-          type:
-          - string
-          - 'null'
-        uuid:
-          type: string
-          format: uuid
   securitySchemes:
     bearer_auth:
       type: http

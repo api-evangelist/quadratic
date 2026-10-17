@@ -259,6 +259,14 @@ components:
         top_left_position:
           type: string
           description: A1 anchor for the new table's top-left.
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
     ErrorDetail:
       type: object
       required:
@@ -315,14 +323,6 @@ components:
         table_location:
           type: string
           description: A1 cell inside the target table (any cell within its range).
-    ErrorBody:
-      type: object
-      description: Canonical error envelope returned by every non-2xx response.
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
   securitySchemes:
     bearer_auth:
       type: http

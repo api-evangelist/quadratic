@@ -757,82 +757,32 @@ paths:
       - bearer_auth: []
 components:
   schemas:
-    MoveCellsRequest:
+    SetBordersRequest:
       type: object
       required:
-      - source_selection_rect
-      - target_top_left_position
+      - borders
       properties:
-        sheet_name:
-          type:
-          - string
-          - 'null'
-        source_selection_rect:
-          type: string
-          description: A1-style rectangle to move from, e.g. `A1:B10`.
-        target_top_left_position:
-          type: string
-          description: A1-style cell to anchor the moved block at.
-    SetFormatsRequest:
-      type: object
-      required:
-      - formats
-      properties:
-        formats:
+        borders:
           type: array
           items: {}
-          description: 'Array of format updates. Each entry is `{ sheet_name?, selection,
+          description: 'Array of border updates. Each entry is `{ sheet_name?, selection,
 
-            bold?, italic?, underline?, strike_through?, text_color?, fill_color?,
+            color?, border_type? }`. `border_type` defaults to `"all"` when
 
-            align?, vertical_align?, wrap?, numeric_commas?, number_type?,
+            omitted and accepts: `top`, `bottom`, `left`, `right`, `outer`,
 
-            currency_symbol?, date_time?, font_size? }`. Colors accept hex
+            `inner`, `horizontal`, `vertical`, `all`, `clear`. `color` accepts
 
-            (`#RRGGBB`/`#RGB`), `rgb(...)`, or CSS named colors.'
+            hex (`#RRGGBB`/`#RGB`), `rgb(...)`, or CSS named colors and defaults
+
+            to black.'
           example:
-          - selection: A1:B1
-            bold: true
-            fill_color: '#fef3c7'
-          - selection: A2:B100
-            align: right
-            number_type: currency
-            currency_symbol: $
-    RerunCodeRequest:
-      type: object
-      properties:
-        selection:
-          type:
-          - string
-          - 'null'
-          description: Optional A1 selection to limit which code cells are re-run.
-        sheet_name:
-          type:
-          - string
-          - 'null'
-    MergeCellsRequest:
-      type: object
-      required:
-      - selection
-      properties:
-        selection:
-          type: string
-          description: A1 range to merge / unmerge.
-        sheet_name:
-          type:
-          - string
-          - 'null'
-    SetFormulaCellsRequest:
-      type: object
-      required:
-      - formulas
-      properties:
-        formulas:
-          type: array
-          items: {}
-          description: 'Array of `{ position, formula }` (or richer) entries; the worker
-
-            validates the inner shape.'
+          - selection: A1:C5
+            color: '#000000'
+            border_type: all
+          - selection: D1:D10
+            color: red
+            border_type: left
     ErrorDetail:
       type: object
       required:
@@ -882,32 +832,95 @@ components:
           - 'null'
         sql_code_string:
           type: string
-    SetBordersRequest:
+    MoveCellsRequest:
       type: object
       required:
-      - borders
+      - source_selection_rect
+      - target_top_left_position
       properties:
-        borders:
+        sheet_name:
+          type:
+          - string
+          - 'null'
+        source_selection_rect:
+          type: string
+          description: A1-style rectangle to move from, e.g. `A1:B10`.
+        target_top_left_position:
+          type: string
+          description: A1-style cell to anchor the moved block at.
+    RerunCodeRequest:
+      type: object
+      properties:
+        selection:
+          type:
+          - string
+          - 'null'
+          description: Optional A1 selection to limit which code cells are re-run.
+        sheet_name:
+          type:
+          - string
+          - 'null'
+    SetCellValuesRequest:
+      type: object
+      required:
+      - top_left_position
+      - cell_values
+      properties:
+        cell_values:
+          description: 2D array of values (rows of strings/numbers/booleans/etc).
+        sheet_name:
+          type:
+          - string
+          - 'null'
+        top_left_position:
+          type: string
+          description: A1-style top-left anchor for the array, e.g. `A1`.
+          example: A1
+    SetFormatsRequest:
+      type: object
+      required:
+      - formats
+      properties:
+        formats:
           type: array
           items: {}
-          description: 'Array of border updates. Each entry is `{ sheet_name?, selection,
+          description: 'Array of format updates. Each entry is `{ sheet_name?, selection,
 
-            color?, border_type? }`. `border_type` defaults to `"all"` when
+            bold?, italic?, underline?, strike_through?, text_color?, fill_color?,
 
-            omitted and accepts: `top`, `bottom`, `left`, `right`, `outer`,
+            align?, vertical_align?, wrap?, numeric_commas?, number_type?,
 
-            `inner`, `horizontal`, `vertical`, `all`, `clear`. `color` accepts
+            currency_symbol?, date_time?, font_size? }`. Colors accept hex
 
-            hex (`#RRGGBB`/`#RGB`), `rgb(...)`, or CSS named colors and defaults
-
-            to black.'
+            (`#RRGGBB`/`#RGB`), `rgb(...)`, or CSS named colors.'
           example:
-          - selection: A1:C5
-            color: '#000000'
-            border_type: all
-          - selection: D1:D10
-            color: red
-            border_type: left
+          - selection: A1:B1
+            bold: true
+            fill_color: '#fef3c7'
+          - selection: A2:B100
+            align: right
+            number_type: currency
+            currency_symbol: $
+    ErrorBody:
+      type: object
+      description: Canonical error envelope returned by every non-2xx response.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    MergeCellsRequest:
+      type: object
+      required:
+      - selection
+      properties:
+        selection:
+          type: string
+          description: A1 range to merge / unmerge.
+        sheet_name:
+          type:
+          - string
+          - 'null'
     SetCodeCellRequest:
       type: object
       required:
@@ -930,14 +943,6 @@ components:
           type:
           - string
           - 'null'
-    ErrorBody:
-      type: object
-      description: Canonical error envelope returned by every non-2xx response.
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
     DeleteCellsRequest:
       type: object
       required:
@@ -949,22 +954,17 @@ components:
           type:
           - string
           - 'null'
-    SetCellValuesRequest:
+    SetFormulaCellsRequest:
       type: object
       required:
-      - top_left_position
-      - cell_values
+      - formulas
       properties:
-        cell_values:
-          description: 2D array of values (rows of strings/numbers/booleans/etc).
-        sheet_name:
-          type:
-          - string
-          - 'null'
-        top_left_position:
-          type: string
-          description: A1-style top-left anchor for the array, e.g. `A1`.
-          example: A1
+        formulas:
+          type: array
+          items: {}
+          description: 'Array of `{ position, formula }` (or richer) entries; the worker
+
+            validates the inner shape.'
   securitySchemes:
     bearer_auth:
       type: http
