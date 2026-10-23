@@ -329,3 +329,9 @@ components:
       scheme: bearer
       bearerFormat: API token (qdx_live_… or qdx_test_…)
       description: 'API tokens are minted from the Quadratic UI under Team Settings → API Tokens. Send as `Authorization: Bearer <token>`.'
+x-provenance:
+  method: harvested
+  publisher: Quadratic
+  source: https://developer-api.quadratichq.com/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
